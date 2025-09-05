@@ -1,25 +1,43 @@
-export function createLoop({ renderer, scene, camera, updatables = [], systems = [] }) {
-  let running = false;
-  let last = performance.now();
+import { Logger } from "../utils/logger.js";
 
-  function frame(now) {
-    if (!running) return;
-    const dt = Math.min((now - last) / 1000, 0.1);
-    last = now;
+export function createLoop(renderer, scene, camera, registry) {
+  const systems = [];
+  let _raf = null;
+  let _last = 0;
 
-    // legacy/updatable objects still supported
-    for (const u of updatables) if (typeof u.tick === "function") u.tick(dt);
-
-    // new: systems
-    for (const s of systems) s(dt);
-
-    renderer.render(scene, camera);
-    requestAnimationFrame(frame);
+  function addSystem(sys) {
+    systems.push(sys);
+    Logger.info("[loop] addSystem", { count: systems.length });
   }
 
-  return {
-    start() { if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); } },
-    stop() { running = false; },
-    get isRunning() { return running; },
-  };
+  function step(dt, world) {
+    for (const sys of systems) sys(dt, world, registry);
+    if (renderer && scene && camera) renderer.render(scene, camera);
+  }
+
+  function frame(ts) {
+    if (!_last) _last = ts;
+    const dt = Math.min(0.05, (ts - _last) / 1000);
+    _last = ts;
+    step(dt, world);
+    _raf = requestAnimationFrame(frame);
+  }
+
+  const world = { scene, camera, renderer, loop: { addSystem, step, stop, start }, input: { keys: {} } };
+
+  function start() {
+    if (_raf == null) {
+      Logger.info("[loop] start");
+      _raf = requestAnimationFrame(frame);
+    }
+  }
+  function stop() {
+    if (_raf != null) {
+      cancelAnimationFrame(_raf);
+      _raf = null;
+      Logger.info("[loop] stop");
+    }
+  }
+
+  return { addSystem, step, start, stop, systems, world };
 }

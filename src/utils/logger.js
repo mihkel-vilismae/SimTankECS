@@ -1,13 +1,23 @@
-/**
- * Minimal Logger wrapper — never call console directly in app code.
- * Usage: Logger.log(...), Logger.info(...), Logger.warn(...), Logger.error(...)
- */
 export class Logger {
-  static level = 0; // 0:log,1:info,2:warn,3:error
-  static setLevel(lvl){ Logger.level = Math.max(0, Math.min(3, lvl|0)); }
+  static levels = { error: 0, warn: 1, info: 2, log: 3 };
+  static level = "info";
 
-  static log(...args){ if (Logger.level <= 0) console.log(...args); }
-  static info(...args){ if (Logger.level <= 1) console.info(...args); }
-  static warn(...args){ if (Logger.level <= 2) console.warn(...args); }
-  static error(...args){ if (Logger.level <= 3) console.error(...args); }
+  static setLevel(level) {
+    if (level in Logger.levels) Logger.level = level;
+  }
+  static #should(method) {
+    return Logger.levels[method] <= Logger.levels[Logger.level];
+  }
+  static info(...args) {
+    if (Logger.#should("info")) console.info(...args);
+  }
+  static warn(...args) {
+    if (Logger.#should("warn")) console.warn(...args);
+  }
+  static error(...args) {
+    if (Logger.#should("error")) console.error(...args);
+  }
+  static log(...args) {
+    if (Logger.#should("log")) console.log(...args);
+  }
 }

@@ -1,25 +1,9 @@
 import * as THREE from "three";
-
-/**
- * Adds a simple ground plane.
- * Returns { ground }.
- */
-export function createGround(scene, {
-  size = 200,
-  color = 0x808080,
-  roughness = 1.0,
-  metalness = 0.0
-} = {}) {
-  const geometry = new THREE.PlaneGeometry(size, size);
-  const material = new THREE.MeshStandardMaterial({
-    color,
-    roughness,
-    metalness
-  });
-  const ground = new THREE.Mesh(geometry, material);
-  ground.rotation.x = -Math.PI / 2;
-  ground.receiveShadow = true;
-  ground.name = "Ground";
-  scene.add(ground);
-  return { ground };
+export function createGround() {
+  const geo = new THREE.PlaneGeometry(200, 200);
+  const mat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.receiveShadow = true;
+  return mesh;
 }

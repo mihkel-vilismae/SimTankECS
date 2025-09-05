@@ -1,2 +1,12 @@
-#hud-root { position: fixed; top: 8px; left: 8px; font-family: ui-sans-serif, system-ui, Arial; color: #eee; }
-.hud-badge { background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15); padding: 6px 8px; border-radius: 6px; }
+#hud-root {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-family: system-ui, Arial, sans-serif;
+  font-size: 12px;
+  border-radius: 8px;
+  pointer-events: none;
+}
