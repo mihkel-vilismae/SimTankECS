@@ -56,3 +56,9 @@
   cursor: pointer;
 }
 .hud-btn:hover { background: rgba(255,255,255,0.15); }
+
+
+/* Ensure HUD is above canvas and buttons are clickable */
+#hud-root { z-index: 9999; pointer-events: none; }
+#hud-panels { pointer-events: auto; }
+.hud-btn { pointer-events: auto; }

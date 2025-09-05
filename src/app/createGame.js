@@ -74,6 +74,8 @@ export function createGame(canvas = document.getElementById("app")) {
   // Systems
   registerSystems({ loop, scene, registry, camera });
   const controlledHud = createControlledObjectHUD();
+  // Set initial data so it's visible before the first frame
+  controlledHud.setData(getControlledEntity());
   const hudUpdateSystem = hudUpdateSystemFactory(controlledHud, getControlledEntity);
   loop.addSystem(hudUpdateSystem);
 
