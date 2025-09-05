@@ -10,3 +10,49 @@
   border-radius: 8px;
   pointer-events: none;
 }
+
+
+/* Panels container inside #hud-root */
+#hud-panels {
+  margin-top: 6px;
+  display: grid;
+  gap: 8px;
+}
+
+.hud-panel {
+  background: rgba(20,20,28,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 220px;
+}
+
+.hud-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.hud-body {
+  display: grid;
+  gap: 4px;
+}
+
+.hud-row { display: flex; justify-content: space-between; gap: 8px; }
+.hud-k { opacity: 0.8; }
+.hud-v { font-weight: 600; }
+
+.hud-btn {
+  display: inline-block;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.hud-btn:hover { background: rgba(255,255,255,0.15); }

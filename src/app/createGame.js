@@ -16,6 +16,9 @@ import { registerSystems } from "./registerSystems.js";
 import { attachInput } from "./attachInput.js";
 import { attachMouse } from "./attachMouse.js";
 import { createHud } from "../hud/createHud.js";
+import { createControlledObjectHUD } from "../hud/controlledObjectHud.js";
+import { createTestButtonsHUD } from "../hud/testButtonsHud.js";
+import { hudUpdateSystemFactory } from "../systems/hudUpdateSystem.js";
 
 export function createGame(canvas = document.getElementById("app")) {
   const scene = createScene();
@@ -35,14 +38,51 @@ export function createGame(canvas = document.getElementById("app")) {
   const ball = createBall(registry);
   scene.add(ball.object3D);
 
+  // Controlled entity state (default: tank)
+  loop.world.control = {
+    entityId: tank.id,
+  };
+
+  function getControlledEntity() {
+    const id = loop.world.control?.entityId;
+    return id ? registry.getById(id) : null;
+  }
+
+  function addTank() {
+    const t2 = createTank(registry); scene.add(t2.object3D); return t2;
+  }
+  function addBall() {
+    const b2 = createBall(registry); scene.add(b2.object3D); return b2;
+  }
+  function switchControlled() {
+    // cycle through entities that have InputMove
+    const list = Array.from(registry.entities.values()).filter(e => e.components?.InputMove);
+    if (list.length === 0) return;
+    const current = getControlledEntity();
+    const idx = Math.max(0, list.findIndex(e => current && e.id === current.id));
+    const next = list[(idx + 1) % list.length];
+    loop.world.control.entityId = next.id;
+  }
+  function removeAll() {
+    for (const e of Array.from(registry.entities.values())) {
+      if (e.object3D) scene.remove(e.object3D);
+      registry.remove(e.id);
+    }
+    loop.world.control.entityId = undefined;
+  }
+
   // Systems
   registerSystems({ loop, scene, registry, camera });
+  const controlledHud = createControlledObjectHUD();
+  const hudUpdateSystem = hudUpdateSystemFactory(controlledHud, getControlledEntity);
+  loop.addSystem(hudUpdateSystem);
 
   // Input + HUD
   const detachInput = attachInput(loop.world);
   const detachMouse = attachMouse(loop.world, canvas);
   const hud = createHud();
   hud.setMessage("WSAD drive, A/D turn. Q/E up/down (ball). Mouse to aim.");
+  createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });
 
   const detachResize = setupResize(renderer, camera);
   Logger.info("[createGame] world ready (tank + ball)");
