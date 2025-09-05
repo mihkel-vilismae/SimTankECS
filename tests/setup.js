@@ -63,4 +63,50 @@ vi.mock("three", () => ({
   Mesh,
   Color,
   BoxGeometry,
+
+class Ray {
+  constructor(){ this.origin = new Vector3(); this.direction = new Vector3(0,0,1); }
+  // intersect plane y=0: if direction.y == 0 => no hit; t = -origin.y / dir.y
+  intersectPlane(plane, out){
+    // plane is defined by normal (0,1,0) and constant (0) in our usage
+    if (Math.abs(this.direction.y) < 1e-6) return null;
+    const t = -this.origin.y / this.direction.y;
+    if (t < 0) return null;
+    out.x = this.origin.x + this.direction.x * t;
+    out.y = this.origin.y + this.direction.y * t;
+    out.z = this.origin.z + this.direction.z * t;
+    return out;
+  }
+}
+class Plane {
+  constructor(normal, constant){ this.normal = normal; this.constant = constant; }
+}
+class Raycaster {
+  constructor(){ this.ray = new Ray(); }
+  setFromCamera(ndc, camera){
+    // Very rough mock: map NDC to a ray starting at camera position towards forward Z
+    this.ray.origin.set(camera.position.x, camera.position.y, camera.position.z);
+    // Map ndc to a simple direction; ensure y negative points downward on screen
+    this.ray.direction.set(ndc.x, -ndc.y, 1).normalize();
+  }
+}
+
+return {
+  default: {},
+  Vector3,
+  ArrowHelper,
+  Scene,
+  WebGLRenderer,
+  PerspectiveCamera,
+  PlaneGeometry,
+  MeshStandardMaterial,
+  SphereGeometry,
+  MeshBasicMaterial,
+  BackSide,
+  Mesh,
+  Color,
+  BoxGeometry,
+  Raycaster,
+  Plane,
+};
 }));

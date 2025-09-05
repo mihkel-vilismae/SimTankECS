@@ -11,3 +11,8 @@ npx vite
 npm test
 npm run coverage
 ```
+
+
+## New Controls
+- Q/E: Ball climb/descend, Shift: boost
+- Mouse: aim (entities with MouseFollower)
