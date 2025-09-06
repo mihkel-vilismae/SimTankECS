@@ -48,6 +48,11 @@ class MeshBasicMaterial{ constructor(o){ this.o=o; } }
 const BackSide = "BackSide";
 class BoxGeometry{ constructor(){} }
 class AmbientLight{ constructor(){}}
+class CylinderGeometry{ constructor(){}}
+class Group{ constructor(){ this.children=[]; this.position=new Vector3(); this.rotation={x:0,y:0,z:0}; }
+  add(o){ this.children.push(o); }
+  remove(o){ const i=this.children.indexOf(o); if(i>=0) this.children.splice(i,1); }
+}
 class DirectionalLight{ constructor(){ this.position = new Vector3(); this.castShadow = false; this.shadow = { mapSize: { set(){} }, camera: { } }; }}
 
 // ---- Raycasting mocks ----
@@ -98,5 +103,7 @@ vi.mock("three", () => {
     Plane,
     AmbientLight,
     DirectionalLight,
+    CylinderGeometry,
+    Group
   };
 });
