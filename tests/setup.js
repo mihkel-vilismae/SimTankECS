@@ -32,8 +32,8 @@ class Mesh {
   constructor(geo, mat){ this.position=new Vector3(); this.rotation={x:0,y:0,z:0}; this.geo=geo; this.mat=mat; this.castShadow=false; }
 }
 class WebGLRenderer{
-  constructor(){}
-  setPixelRatio(){} setSize(){} get domElement(){ return {}; }
+  constructor(){ this._dom = {}; }
+  setPixelRatio(){} setSize(){} get domElement(){ return this._dom; }
   render(){}
   get shadowMap(){ return { enabled: false, set enabled(v){} }; }
 }
@@ -48,22 +48,7 @@ class MeshBasicMaterial{ constructor(o){ this.o=o; } }
 const BackSide = "BackSide";
 class BoxGeometry{ constructor(){} }
 
-vi.mock("three", () => ({
-  default: {},
-  Vector3,
-  ArrowHelper,
-  Scene,
-  WebGLRenderer,
-  PerspectiveCamera,
-  PlaneGeometry,
-  MeshStandardMaterial,
-  SphereGeometry,
-  MeshBasicMaterial,
-  BackSide,
-  Mesh,
-  Color,
-  BoxGeometry,
-
+// ---- Raycasting mocks ----
 class Ray {
   constructor(){ this.origin = new Vector3(); this.direction = new Vector3(0,0,1); }
   // intersect plane y=0: if direction.y == 0 => no hit; t = -origin.y / dir.y
@@ -91,22 +76,23 @@ class Raycaster {
   }
 }
 
-return {
-  default: {},
-  Vector3,
-  ArrowHelper,
-  Scene,
-  WebGLRenderer,
-  PerspectiveCamera,
-  PlaneGeometry,
-  MeshStandardMaterial,
-  SphereGeometry,
-  MeshBasicMaterial,
-  BackSide,
-  Mesh,
-  Color,
-  BoxGeometry,
-  Raycaster,
-  Plane,
-};
-}));
+vi.mock("three", () => {
+  return {
+    default: {},
+    Vector3,
+    ArrowHelper,
+    Scene,
+    WebGLRenderer,
+    PerspectiveCamera,
+    PlaneGeometry,
+    MeshStandardMaterial,
+    SphereGeometry,
+    MeshBasicMaterial,
+    BackSide,
+    Mesh,
+    Color,
+    BoxGeometry,
+    Raycaster,
+    Plane,
+  };
+});
