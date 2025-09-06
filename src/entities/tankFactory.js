@@ -7,7 +7,7 @@ import { createTurret } from "../components/turret.js";
 import { createGun } from "../components/gun.js";
 
 /** Creates a hull, a turret mounted on the hull, and two guns mounted on the turret. */
-export function createTank(registry) {
+export function createTank(registry, scene) {
   // HULL (blue box)
   const hullMesh = new THREE.Mesh(
     new THREE.BoxGeometry(1.2, 0.6, 2.0),
@@ -30,6 +30,7 @@ export function createTank(registry) {
     },
   };
   registry.add(hull);
+  if (scene) scene.add(hull.object3D);
 
   // TURRET (dark gray disc)
   const turretMesh = new THREE.Mesh(
@@ -52,6 +53,7 @@ export function createTank(registry) {
     },
   };
   registry.add(turret);
+  if (scene) scene.add(turret.object3D);
 
   // MACHINE GUN (small barrel + receiver)
   const mgGroup = new THREE.Group();
@@ -78,6 +80,7 @@ export function createTank(registry) {
     },
   };
   registry.add(mg);
+  if (scene) scene.add(mg.object3D);
 
   // CANNON (long barrel + muzzle brake)
   const cannonGroup = new THREE.Group();
@@ -105,6 +108,7 @@ export function createTank(registry) {
     },
   };
   registry.add(cannon);
+  if (scene) scene.add(cannon.object3D);
 
   return hull;
 }

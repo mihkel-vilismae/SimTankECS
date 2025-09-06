@@ -16,7 +16,7 @@ import { weaponInputSystem } from "../systems/weapons/weaponInputSystem.js";
 import { weaponSelectionSystem } from "../systems/weapons/weaponSelectionSystem.js";
 import { weaponRecoilSystem } from "../systems/weapons/weaponRecoilSystem.js";
 
-export function registerSystems({ loop, scene, registry, camera, renderer }){
+export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD

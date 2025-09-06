@@ -34,7 +34,7 @@ export function createGame(canvas = document.getElementById("app")) {
   scene.add(createSky());
 
   // Entities
-  const tank = createTank(registry);
+  const tank = createTank(registry, scene);
   scene.add(tank.object3D);
   const ball = createBall(registry);
   scene.add(ball.object3D);
