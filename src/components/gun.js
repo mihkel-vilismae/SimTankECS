@@ -1,4 +1,6 @@
 export function createGun({
+  recoilMax = 0.2,
+  recoilImpulseScale = 60,
   recoilKick = 0.03,
   recoilRecover = 8,
   recoilOffset = 0,
@@ -13,5 +15,5 @@ export function createGun({
   muzzleVel = 350,
   cooldown = 0,
 } = {}) {
-  return { type, pitch, pitchMin, pitchMax, pitchSpeed, fireRate, ammo, spreadRad, muzzleVel, cooldown, recoilKick, recoilRecover, recoilOffset };
+  return { recoilMax, recoilImpulseScale, type, pitch, pitchMin, pitchMax, pitchSpeed, fireRate, ammo, spreadRad, muzzleVel, cooldown, recoilKick, recoilRecover, recoilOffset };
 }

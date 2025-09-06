@@ -2,6 +2,7 @@ import { Logger } from "../../utils/logger.js";
 
 /**
  * Applies parent Hardpoint slot transform to children with Mount, writing to child Transform.
+ * Recoil is applied along the gun's local -Z (barrel backwards), taking pitch and yaw into account.
  */
 export function hardpointMountSystem(dt, world, registry) {
   const mounts = registry.query(["Mount", "Transform"]);
@@ -15,37 +16,51 @@ export function hardpointMountSystem(dt, world, registry) {
     const ct = child.components.Transform;
     if (!hp || !pt || !ct) continue;
 
-    const slot = hp.slots.find(s => s.id === m.slotId);
+    const slot = hp.slots?.find(s => s.id === m.slotId);
     if (!slot) continue;
 
-    // Parent world (use only yaw from parent rotation for simplicity)
-    const cy = Math.cos(pt.rotation.yaw), sy = Math.sin(pt.rotation.yaw);
+    // Parent yaw + slot yaw
+    const yaw = pt.rotation.yaw + (slot.localYaw ?? 0);
+    const cy = Math.cos(yaw);
+    const sy = Math.sin(yaw);
 
-    // Slot local -> parent space
-    const sx = slot.localPos?.x ?? 0, syy = slot.localPos?.y ?? 0, sz = slot.localPos?.z ?? 0;
-    const px = pt.position.x + (sx * cy + sz * sy);
-    const py = pt.position.y + syy;
-    const pz = pt.position.z + (sz * cy - sx * sy);
+    // Slot base in world (apply parent yaw on XZ)
+    const sx = slot.localPos?.x ?? 0;
+    const syLocal = slot.localPos?.y ?? 0;
+    const sz = slot.localPos?.z ?? 0;
 
-    // Child position (apply mount offset local first order small)
+    const baseX = pt.position.x + (sx * cy + sz * sy);
+    const baseY = pt.position.y + syLocal;
+    const baseZ = pt.position.z + (sz * cy - sx * sy);
+
+    // Mount offset in local -> rotate by yaw to world
     const off = m.offset ?? { pos:{x:0,y:0,z:0}, yaw:0, pitch:0, roll:0 };
-    let ox = off.pos?.x ?? 0, oy = off.pos?.y ?? 0, oz = off.pos?.z ?? 0;
-    if (child.components?.Gun?.recoilOffset) {
-      const pitch = child.components.Gun.pitch || 0;
-      const r = child.components.Gun.recoilOffset;
-      // Apply recoil opposite to barrel (local -Z), factoring pitch into Y/Z
-      oy -= r * Math.sin(pitch);
-      oz -= r * Math.cos(pitch);
-    }
-    const cx = px + (ox * cy + oz * sy);
-    const cz = pz + (oz * cy - ox * sy);
-    const cyaw = (pt.rotation.yaw + (slot.localYaw ?? 0) + (off.yaw ?? 0));
+    const ox = off.pos?.x ?? 0, oy0 = off.pos?.y ?? 0, oz0 = off.pos?.z ?? 0;
+    const offX = (ox * cy + oz0 * sy);
+    const offZ = (oz0 * cy - ox * sy);
 
-    ct.position.x = cx;
-    ct.position.y = py + oy;
-    ct.position.z = cz;
+    // Recoil offset in world (only for guns)
+    let recX = 0, recY = 0, recZ = 0;
+    if (child.components?.Gun) {
+      const g = child.components.Gun;
+      const r = g.recoilOffset || 0;
+      const pitch = g.pitch || 0;
+      // Local recoil vector: (0, -r*sin(pitch), -r*cos(pitch))
+      recY = -r * Math.sin(pitch);
+      const localZ = -r * Math.cos(pitch);
+      // Rotate by yaw into world
+      recX = localZ * sy;
+      recZ = localZ * cy;
+    }
+
+    // Final world position
+    ct.position.x = baseX + offX + recX;
+    ct.position.y = baseY + oy0 + recY;
+    ct.position.z = baseZ + offZ + recZ;
+
+    // Rotation yaw and pitch
+    const cyaw = yaw + (off.yaw ?? 0);
     ct.rotation.yaw = cyaw + (child.components?.Turret?.yaw ?? 0);
-    // If it's a gun, pitch is applied here
     if (child.components?.Gun) {
       ct.rotation.pitch = child.components.Gun.pitch;
     }
