@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger.js";
+import { Logger } from "../../utils/logger.js";
 
 /**
  * Keeps camera position fixed, but orients it to look at the controlled entity.

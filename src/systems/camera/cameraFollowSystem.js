@@ -1,5 +1,5 @@
-import { lerp } from "../utils/math3d.js";
-import { Logger } from "../utils/logger.js";
+import { lerp } from "../../utils/math3d.js";
+import { Logger } from "../../utils/logger.js";
 
 export function cameraFollowSystem(dt, world, registry) {
   if (world.cameraMode !== "follow") return;

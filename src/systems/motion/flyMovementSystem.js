@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger.js";
+import { Logger } from "../../utils/logger.js";
 
 export function flyMovementSystem(dt, world, registry) {
   const targetId = world.control?.entityId;

@@ -10,7 +10,7 @@ import { createOrbitControlsSystem } from "../systems/camera/orbitControlsSystem
 import { cameraFollowSystem } from "../systems/camera/cameraFollowSystem.js";
 import { arrowGizmoSystemFactory } from "../systems/rendering/arrowGizmoSystem.js";
 
-export function registerSystems({ loop, scene, registry }) {
+export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD

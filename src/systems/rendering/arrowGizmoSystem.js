@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { Logger } from "../utils/logger.js";
-import { yawToForward } from "../utils/math3d.js";
+import { Logger } from "../../utils/logger.js";
+import { yawToForward } from "../../utils/math3d.js";
 
 export function arrowGizmoSystemFactory(scene) {
   const helpers = new Map();

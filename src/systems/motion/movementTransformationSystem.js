@@ -1,5 +1,5 @@
-import { normalizeAngle } from "../utils/math3d.js";
-import { Logger } from "../utils/logger.js";
+import { normalizeAngle } from "../../utils/math3d.js";
+import { Logger } from "../../utils/logger.js";
 
 export function movementTransformationSystem(dt, world, registry) {
   const targetId = world.control?.entityId;

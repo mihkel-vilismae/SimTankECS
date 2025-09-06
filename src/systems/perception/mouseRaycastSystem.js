@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Logger } from "../utils/logger.js";
+import { Logger } from "../../utils/logger.js";
 
 const raycaster = new THREE.Raycaster();
 const planeY0 = new THREE.Plane(new THREE.Vector3(0,1,0), 0); // y = 0 plane

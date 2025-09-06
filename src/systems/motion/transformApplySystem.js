@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger.js";
+import { Logger } from "../../utils/logger.js";
 
 export function transformApplySystem(dt, world, registry) {
   for (const ent of registry.query(["Transform"])) {

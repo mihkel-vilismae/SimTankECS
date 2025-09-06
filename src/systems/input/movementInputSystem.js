@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger.js";
+import { Logger } from "../../utils/logger.js";
 
 export function movementInputSystem(dt, world, registry) {
   const { keys } = world.input;

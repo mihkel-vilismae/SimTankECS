@@ -18,7 +18,7 @@ import { attachMouse } from "./attachMouse.js";
 import { createHud } from "../hud/createHud.js";
 import { createControlledObjectHUD } from "../hud/controlledObjectHud.js";
 import { createTestButtonsHUD } from "../hud/testButtonsHud.js";
-import { hudUpdateSystemFactory } from "../systems/hudUpdateSystem.js";
+import { hudUpdateSystemFactory } from "../systems/ui/hudUpdateSystem.js";
 import { createCameraModesHUD } from "../hud/cameraModesHud.js";
 
 export function createGame(canvas = document.getElementById("app")) {
