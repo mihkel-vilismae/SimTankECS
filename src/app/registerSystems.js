@@ -27,8 +27,8 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
 
-  loop.addSystem(weaponSelectionSystem); // cycle weapons
-  loop.addSystem(weaponRecoilSystem);  // weapon recoil - Order: after movement, before transform
+  //loop.addSystem(weaponSelectionSystem); // cycle weapons
+  //loop.addSystem(weaponRecoilSystem);  // weapon recoil - Order: after movement, before transform
 
   // Aiming & mounting happen before we mirror Transforms to object3D
   loop.addSystem(mouseRaycastSystem);

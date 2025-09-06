@@ -42,5 +42,14 @@ export function createRegistry() {
     return entity?.components ? entity.components[name] : undefined;
   }
 
-  return { add, remove, getById, query, nextId, entities, addComponent, removeComponent, hasComponent, getComponent };
+  function ensureComponent(entity, name, factory) {
+    if (!entity.components) entity.components = {};
+    if (!entity.components[name]) {
+      entity.components[name] = typeof factory === "function" ? factory() : (factory || {});
+      Logger.info("[registry] ensureComponent", { id: entity.id, name });
+    }
+    return entity.components[name];
+  }
+
+  return { add, remove, getById, query, nextId, entities, addComponent, removeComponent, hasComponent, getComponent, ensureComponent };
 }
