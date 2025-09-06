@@ -12,11 +12,11 @@ describe("weaponRecoil velocity decay", () => {
   it("reduces recoil velocity magnitude over time", () => {
     const registry = makeReg();
     const e = { id: registry.nextId(), components: { Transform: createTransform(0,0,0,0,0,0), Gun: createGun({ recoilRecover: 12 }) } };
-    e.components.Gun.recoilOffset = 0.1;
-    e.components.Gun._recoilVel = -5;
+    registry.getComponent(e, "Gun").recoilOffset = 0.1;
+    registry.getComponent(e, "Gun")._recoilVel = -5;
     registry.add(e);
     const world = {};
     weaponRecoilSystem(1/60, world, registry);
-    expect(Math.abs(e.components.Gun._recoilVel)).toBeLessThan(5);
+    expect(Math.abs(registry.getComponent(e, "Gun")._recoilVel)).toBeLessThan(5);
   });
 });

@@ -13,18 +13,18 @@ export function weaponElevationSystem(dt, world, registry) {
   const guns = registry.query(["Gun", "Mount", "Transform"]);
   for (const g of guns) {
     // Only adjust for guns mounted to any turret parented to the hull
-    const parent = registry.getById(g.components.Mount.parent);
+    const parent = registry.getById(registry.getComponent(g, "Mount").parent);
     if (!parent?.components?.Turret) continue;
 
-    const gt = g.components.Gun;
-    const tr = g.components.Transform;
+    const gt = registry.getComponent(g, "Gun");
+    const tr = registry.getComponent(g, "Transform");
     const target = world.mouse.worldPoint;
 
     const dx = target.x - tr.position.x;
     const dy = target.y - tr.position.y;
     const dz = target.z - tr.position.z;
     const horizontalDist = Math.max(1e-5, Math.hypot(dx, dz));
-    const desiredPitch = Math.atan2(dy, horizontalDist);
+    const desiredPitch = -Math.atan2(dy, horizontalDist); // invert so mouse-up pitches gun up
 
     const step = Math.sign(desiredPitch - gt.pitch) * gt.pitchSpeed * dt;
     let next = gt.pitch + step;

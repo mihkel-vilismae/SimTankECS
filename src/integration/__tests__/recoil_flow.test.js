@@ -23,16 +23,16 @@ describe("Integration: sustained MG burst recoils and returns", () => {
     const scene = { add(){} };
     const hull = createTank(registry, scene);
     const guns = registry.query(["Gun"]);
-    const mg = guns.find(e => e.components.Gun.type === "MachineGun");
+    const mg = guns.find(e => registry.getComponent(e, "Gun").type === "MachineGun");
     const world = { control: { entityId: hull.id }, input: { mouse: { down: true }, keys:{} } };
 
     // Fire for 0.5s then release
     for (let i=0;i<30;i++) step(1/60, world, registry);
     world.input.mouse.down = false;
-    const peak = mg.components.Gun.recoilOffset;
+    const peak = registry.getComponent(mg, "Gun").recoilOffset;
     expect(peak).toBeGreaterThan(0);
     // Let it recover for 2s
     for (let i=0;i<120;i++) step(1/60, world, registry);
-    expect(mg.components.Gun.recoilOffset).toBeLessThan(0.02);
+    expect(registry.getComponent(mg, "Gun").recoilOffset).toBeLessThan(0.02);
   });
 });

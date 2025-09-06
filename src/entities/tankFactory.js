@@ -5,6 +5,7 @@ import { createArrowGizmo } from "../components/arrowGizmo.js";
 import { createHardpoints, createMount } from "../components/hardpoints.js";
 import { createTurret } from "../components/turret.js";
 import { createGun } from "../components/gun.js";
+import { createVfxEmitter } from "../components/vfxEmitter.js";
 
 /** Creates a hull, a turret mounted on the hull, and two guns mounted on the turret. */
 export function createTank(registry, scene) {
@@ -76,6 +77,7 @@ export function createTank(registry, scene) {
     components: {
       Transform: createTransform(0, 1.0, 0, 0, 0, 0),
       Gun: createGun({ type: "MachineGun", fireRate: 12, ammo: 300, spreadRad: 0.02, muzzleVel: 450, recoilKick: 0.02, recoilRecover: 22, recoilMax: 0.15 , recoilImpulseScale: 60 } ),
+      VfxEmitter: createVfxEmitter({ preset: "MG_MUZZLE", localPos:{x:0,y:0.10,z:0.55} }),
       Mount: createMount({ parent: turret.id, slotId: "hp_mg" }),
     },
   };
@@ -104,6 +106,7 @@ export function createTank(registry, scene) {
     components: {
       Transform: createTransform(0, 1.0, 0, 0, 0, 0),
       Gun: createGun({ type: "Cannon", fireRate: 0.5, ammo: 20, spreadRad: 0.002, muzzleVel: 900, pitchMin: -0.05, pitchMax: 0.25, recoilKick: 0.08, recoilRecover: 14, recoilMax: 0.35 , recoilImpulseScale: 120 } ),
+      VfxEmitter: createVfxEmitter({ preset: "CANNON_MUZZLE", localPos:{x:0,y:0.10,z:1.2} }),
       Mount: createMount({ parent: turret.id, slotId: "hp_cannon" }),
     },
   };

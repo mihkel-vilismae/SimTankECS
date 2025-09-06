@@ -28,6 +28,6 @@ describe("hardpointMountSystem offsets", () => {
     registry.add(parent); registry.add(child);
     hardpointMountSystem(1/60, {}, registry);
     // Just ensure it's not at origin and Y includes local + offset
-    expect(child.components.Transform.position.y).toBeCloseTo(2 + 2 + 0.2, 3);
+    expect(registry.getComponent(child, "Transform").position.y).toBeCloseTo(2 + 2 + 0.2, 3);
   });
 });

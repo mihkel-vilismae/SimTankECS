@@ -24,20 +24,20 @@ describe("movementInputSystem turn mapping", () => {
   it("A / Left should set InputMove.turn positive (right turn intent)", () => {
     world.input.keys = { KeyA: true };
     movementInputSystem(1/60, world, registry);
-    expect(ent.components.InputMove.turn).toBeGreaterThan(0);
+    expect(registry.getComponent(ent, "InputMove").turn).toBeGreaterThan(0);
 
     world.input.keys = { ArrowLeft: true };
     movementInputSystem(1/60, world, registry);
-    expect(ent.components.InputMove.turn).toBeGreaterThan(0);
+    expect(registry.getComponent(ent, "InputMove").turn).toBeGreaterThan(0);
   });
 
   it("D / Right should set InputMove.turn negative (left turn intent)", () => {
     world.input.keys = { KeyD: true };
     movementInputSystem(1/60, world, registry);
-    expect(ent.components.InputMove.turn).toBeLessThan(0);
+    expect(registry.getComponent(ent, "InputMove").turn).toBeLessThan(0);
 
     world.input.keys = { ArrowRight: true };
     movementInputSystem(1/60, world, registry);
-    expect(ent.components.InputMove.turn).toBeLessThan(0);
+    expect(registry.getComponent(ent, "InputMove").turn).toBeLessThan(0);
   });
 });

@@ -39,21 +39,21 @@ describe("movementTransformationSystem steering", () => {
   });
 
   it("A / Left should steer right (negative yaw delta); D / Right should steer left (positive yaw delta)", () => {
-    const startYaw = ent.components.Transform.rotation.yaw;
+    const startYaw = registry.getComponent(ent, "Transform").rotation.yaw;
 
     // Simulate 'A' (turn right)
-    ent.components.InputMove.turn = -1;
+    registry.getComponent(ent, "InputMove").turn = -1;
     movementTransformationSystem(dt, world, registry);
-    const yawAfterA = ent.components.Transform.rotation.yaw;
+    const yawAfterA = registry.getComponent(ent, "Transform").rotation.yaw;
     expect(yawAfterA).toBeLessThan(startYaw);
 
     // Reset yaw
-    ent.components.Transform.rotation.yaw = startYaw;
+    registry.getComponent(ent, "Transform").rotation.yaw = startYaw;
 
     // Simulate 'D' (turn left)
-    ent.components.InputMove.turn = 1;
+    registry.getComponent(ent, "InputMove").turn = 1;
     movementTransformationSystem(dt, world, registry);
-    const yawAfterD = ent.components.Transform.rotation.yaw;
+    const yawAfterD = registry.getComponent(ent, "Transform").rotation.yaw;
     expect(yawAfterD).toBeGreaterThan(startYaw);
   });
 });

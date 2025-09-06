@@ -58,7 +58,7 @@ export function createGame(canvas = document.getElementById("app")) {
   }
   function switchControlled() {
     // cycle through entities that have InputMove
-    const list = Array.from(registry.entities.values()).filter(e => e.components?.InputMove);
+    const list = Array.from(registry.entities.values()).filter(e => registry.getComponent(e, "InputMove"));
     if (list.length === 0) return;
     const current = getControlledEntity();
     const idx = Math.max(0, list.findIndex(e => current && e.id === current.id));

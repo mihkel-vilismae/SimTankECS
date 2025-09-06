@@ -10,7 +10,7 @@ export function cameraFollowSystem(dt, world, registry) {
   if (!target) target = registry.query(["Transform"])[0];
   if (!target) return;
 
-  const t = target.components.Transform;
+  const t = registry.getComponent(target, "Transform");
   const cam = world.camera;
 
   const backDist = 6;

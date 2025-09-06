@@ -27,11 +27,11 @@ describe("hardpointMountSystem recoil vector", () => {
         Gun: createGun({})
       }
     };
-    child.components.Gun.recoilOffset = 0.1;
+    registry.getComponent(child, "Gun").recoilOffset = 0.1;
     registry.add(parent); registry.add(child);
     hardpointMountSystem(1/60, {}, registry);
-    expect(child.components.Transform.position.z).toBeLessThan(0); // moved back along -Z
-    expect(child.components.Transform.position.x).toBeCloseTo(0, 6);
+    expect(registry.getComponent(child, "Transform").position.z).toBeLessThan(0); // moved back along -Z
+    expect(registry.getComponent(child, "Transform").position.x).toBeCloseTo(0, 6);
   });
 
   it("with pitch 30deg moves back and slightly down", () => {
@@ -51,10 +51,10 @@ describe("hardpointMountSystem recoil vector", () => {
         Gun: createGun({ pitch: Math.PI/6 })
       }
     };
-    child.components.Gun.recoilOffset = 0.1;
+    registry.getComponent(child, "Gun").recoilOffset = 0.1;
     registry.add(parent); registry.add(child);
     hardpointMountSystem(1/60, {}, registry);
-    expect(child.components.Transform.position.z).toBeLessThan(0);
-    expect(child.components.Transform.position.y).toBeLessThan(0);
+    expect(registry.getComponent(child, "Transform").position.z).toBeLessThan(0);
+    expect(registry.getComponent(child, "Transform").position.y).toBeLessThan(0);
   });
 });

@@ -12,11 +12,11 @@ export function createControlledObjectHUD() {
     const all = registry.query(["Gun","Mount","Transform"]);
     const result = [];
     for (const g of all) {
-      const parent = registry.getById(g.components.Mount.parent);
+      const parent = registry.getById(registry.getComponent(g, "Mount").parent);
       if (parent?.components?.Turret) {
         // Ensure turret is mounted to this hull
-        if (parent.components.Mount?.parent === hullEnt.id) {
-          const gun = g.components.Gun;
+        if (registry.getComponent(parent, "Mount")?.parent === hullEnt.id) {
+          const gun = registry.getComponent(g, "Gun");
           const cd = gun.cooldown || 0;
         const firePeriod = 1 / Math.max(0.0001, gun.fireRate || 1);
         const coolPct = Math.min(100, Math.max(0, Math.round((cd / firePeriod) * 100)));

@@ -17,9 +17,9 @@ export function weaponInputSystem(dt, world, registry) {
   // collect guns under the controlled hull
   const guns = registry.query(["Gun", "Mount"]);
   for (const e of guns) {
-    const parent = registry.getById(e.components.Mount.parent);
+    const parent = registry.getById(registry.getComponent(e, "Mount").parent);
     if (!parent?.components?.Turret) continue;
-    const g = e.components.Gun;
+    const g = registry.getComponent(e, "Gun");
     // tick cooldown
     g.cooldown = Math.max(0, g.cooldown - dt);
 
@@ -34,6 +34,8 @@ export function weaponInputSystem(dt, world, registry) {
       g._recoilVel = (g._recoilVel || 0) - ((g.recoilKick || 0.03) * (g.recoilImpulseScale || 60));
       g.recoilOffset = Math.max(0, Math.min(g.recoilMax ?? 0.2, g.recoilOffset || 0));
       Logger.info("[weaponInputSystem] fired", { type: g.type, ammo: g.ammo });
+      // Raise a FireEvent for VFX
+      registry.addComponent(e, "FireEvent", { count: 1, time: world.time || 0 });
       // (spawn projectiles in a separate system later)
     }
   }

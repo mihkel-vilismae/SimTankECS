@@ -10,7 +10,7 @@ export function lookAtTargetSystem(dt, world, registry) {
   if (!id) return;
   const ent = registry.getById?.(id);
   if (!ent?.components?.Transform) return;
-  const t = ent.components.Transform;
+  const t = registry.getComponent(ent, "Transform");
   world.camera.lookAt(t.position.x, t.position.y, t.position.z);
   Logger.info("[lookAtTargetSystem] look at target", { id });
 }

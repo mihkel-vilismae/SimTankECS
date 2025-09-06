@@ -8,14 +8,14 @@ export function flyInputSystem(dt, world, registry) {
   const ents = registry.query(["Flight"]);
 
   for (const e of ents) {
-    const f = e.components.Flight;
+    const f = registry.getComponent(e, "Flight");
     f.vertical = 0;
     f.boost = 1;
   }
 
   if (!targetId) return;
   const target = registry.getById?.(targetId);
-  if (!target || !target.components?.Flight) return;
-  target.components.Flight.vertical = up - down;
-  target.components.Flight.boost = boost;
+  if (!target || !registry.getComponent(target, "Flight")) return;
+  registry.getComponent(target, "Flight").vertical = up - down;
+  registry.getComponent(target, "Flight").boost = boost;
 }

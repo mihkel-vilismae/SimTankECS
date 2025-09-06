@@ -10,8 +10,8 @@ export function movementInputSystem(dt, world, registry) {
 
   // Zero everyone first
   for (const ent of ents) {
-    ent.components.InputMove.forward = 0;
-    ent.components.InputMove.turn = 0;
+    registry.getComponent(ent, "InputMove").forward = 0;
+    registry.getComponent(ent, "InputMove").turn = 0;
   }
 
   if (!targetId) {
@@ -19,12 +19,12 @@ export function movementInputSystem(dt, world, registry) {
     return;
   }
   const target = registry.getById?.(targetId);
-  if (!target || !target.components?.InputMove) {
+  if (!target || !registry.getComponent(target, "InputMove")) {
     Logger.info("[movementInputSystem] target missing or not drivable", { targetId });
     return;
   }
-  target.components.InputMove.forward = forward;
-  target.components.InputMove.turn = turn;
+  registry.getComponent(target, "InputMove").forward = forward;
+  registry.getComponent(target, "InputMove").turn = turn;
 
   Logger.info("[movementInputSystem] applied to controlled", { forward, turn, targetId });
 }

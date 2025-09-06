@@ -4,11 +4,11 @@ export function flyMovementSystem(dt, world, registry) {
   const targetId = world.control?.entityId;
   if (!targetId) return;
   const e = registry.getById?.(targetId);
-  if (!e || !e.components?.Transform || !e.components?.Flight) return;
+  if (!e || !registry.getComponent(e, "Transform") || !registry.getComponent(e, "Flight")) return;
 
-  const t = e.components.Transform;
-  const f = e.components.Flight;
-  const im = e.components.InputMove; // forward (W/S), turn used here as lateral/strafe (A/D)
+  const t = registry.getComponent(e, "Transform");
+  const f = registry.getComponent(e, "Flight");
+  const im = registry.getComponent(e, "InputMove"); // forward (W/S), turn used here as lateral/strafe (A/D)
 
   // Vertical (Q/E with boost)
   t.position.y += f.vertical * f.climbRate * f.boost * dt;

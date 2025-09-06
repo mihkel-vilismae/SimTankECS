@@ -5,14 +5,14 @@ export function movementTransformationSystem(dt, world, registry) {
   const targetId = world.control?.entityId;
   if (!targetId) return;
   const ent = registry.getById?.(targetId);
-  if (!ent || !ent.components?.Transform || !ent.components?.InputMove || !ent.components?.Locomotion) return;
+  if (!ent || !registry.getComponent(ent, "Transform") || !registry.getComponent(ent, "InputMove") || !registry.getComponent(ent, "Locomotion")) return;
 
   // If the controlled entity can fly, let flyMovementSystem handle horizontal motion.
-  if (ent.components.Flight) return;
+  if (registry.getComponent(ent, "Flight")) return;
 
-  const t = ent.components.Transform;
-  const im = ent.components.InputMove;
-  const loco = ent.components.Locomotion;
+  const t = registry.getComponent(ent, "Transform");
+  const im = registry.getComponent(ent, "InputMove");
+  const loco = registry.getComponent(ent, "Locomotion");
 
   // Turn in place
   t.rotation.yaw = normalizeAngle(t.rotation.yaw + im.turn * loco.turnRate * dt);

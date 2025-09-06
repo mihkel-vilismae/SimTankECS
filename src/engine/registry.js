@@ -23,5 +23,33 @@ export function createRegistry() {
   }
   function nextId() { return _nextId++; }
 
-  return { add, remove, getById, query, nextId, entities };
+  // --- ECS-style helpers ---
+  function addComponent(entity, name, data = {}) {
+    if (!entity.components) entity.components = {};
+    entity.components[name] = data;
+    Logger.info("[registry] addComponent", { id: entity.id, name });
+  }
+  function removeComponent(entity, name) {
+    if (entity?.components && entity.components[name]) {
+      delete entity.components[name];
+      Logger.info("[registry] removeComponent", { id: entity.id, name });
+    }
+  }
+  function hasComponent(entity, name) {
+    return !!(entity?.components && entity.components[name]);
+  }
+  function getComponent(entity, name) {
+    return entity?.components ? entity.components[name] : undefined;
+  }
+
+  function ensureComponent(entity, name, factory) {
+    if (!entity.components) entity.components = {};
+    if (!entity.components[name]) {
+      entity.components[name] = typeof factory === "function" ? factory() : (factory || {});
+      Logger.info("[registry] ensureComponent", { id: entity.id, name });
+    }
+    return entity.components[name];
+  }
+
+  return { add, remove, getById, query, nextId, entities, addComponent, removeComponent, hasComponent, getComponent, ensureComponent };
 }
