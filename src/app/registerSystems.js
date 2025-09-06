@@ -14,6 +14,9 @@ import { turretAimingSystem } from "../systems/aim/turretAimingSystem.js";
 import { weaponElevationSystem } from "../systems/aim/weaponElevationSystem.js";
 import { weaponInputSystem } from "../systems/weapons/weaponInputSystem.js";
 import { weaponSelectionSystem } from "../systems/weapons/weaponSelectionSystem.js";
+import { weaponFireEventSystem } from "../systems/weapons/weaponFireEventSystem.js";
+import { vfxSpawnSystem } from "../systems/vfx/vfxSpawnSystem.js";
+import { vfxUpdateSystem } from "../systems/vfx/vfxUpdateSystem.js";
 import { weaponRecoilSystem } from "../systems/weapons/weaponRecoilSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
@@ -30,6 +33,11 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(hardpointMountSystem);
   // Fire input (ammo/cooldowns)
   loop.addSystem(weaponInputSystem);
+  // Convert FireEvent -> VFX spawn queue
+  loop.addSystem(weaponFireEventSystem);
+  // Spawn then update VFX
+  loop.addSystem(vfxSpawnSystem);
+  loop.addSystem(vfxUpdateSystem);
   // Apply transforms to meshes last
   loop.addSystem(transformApplySystem);
   loop.addSystem(lookAtTargetSystem);
