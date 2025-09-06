@@ -75,7 +75,7 @@ export function createTank(registry, scene) {
     object3D: mgGroup,
     components: {
       Transform: createTransform(0, 1.0, 0, 0, 0, 0),
-      Gun: createGun({ type: "MachineGun", fireRate: 12, ammo: 300, spreadRad: 0.02, muzzleVel: 450, recoilKick: 0.02, recoilRecover: 22 }),
+      Gun: createGun({ type: "MachineGun", fireRate: 12, ammo: 300, spreadRad: 0.02, muzzleVel: 450, recoilKick: 0.02, recoilRecover: 22, recoilMax: 0.15 , recoilImpulseScale: 60 } ),
       Mount: createMount({ parent: turret.id, slotId: "hp_mg" }),
     },
   };
@@ -103,7 +103,7 @@ export function createTank(registry, scene) {
     object3D: cannonGroup,
     components: {
       Transform: createTransform(0, 1.0, 0, 0, 0, 0),
-      Gun: createGun({ type: "Cannon", fireRate: 0.5, ammo: 20, spreadRad: 0.002, muzzleVel: 900, pitchMin: -0.05, pitchMax: 0.25, recoilKick: 0.08, recoilRecover: 14 }),
+      Gun: createGun({ type: "Cannon", fireRate: 0.5, ammo: 20, spreadRad: 0.002, muzzleVel: 900, pitchMin: -0.05, pitchMax: 0.25, recoilKick: 0.08, recoilRecover: 14, recoilMax: 0.35 , recoilImpulseScale: 120 } ),
       Mount: createMount({ parent: turret.id, slotId: "hp_cannon" }),
     },
   };
