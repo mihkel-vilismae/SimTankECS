@@ -13,6 +13,8 @@ import { hardpointMountSystem } from "../systems/attachment/hardpointMountSystem
 import { turretAimingSystem } from "../systems/aim/turretAimingSystem.js";
 import { weaponElevationSystem } from "../systems/aim/weaponElevationSystem.js";
 import { weaponInputSystem } from "../systems/weapons/weaponInputSystem.js";
+import { weaponSelectionSystem } from "../systems/weapons/weaponSelectionSystem.js";
+import { weaponRecoilSystem } from "../systems/weapons/weaponRecoilSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }){
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);

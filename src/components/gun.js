@@ -1,4 +1,7 @@
 export function createGun({
+  recoilKick = 0.03,
+  recoilRecover = 8,
+  recoilOffset = 0,
   type = "MachineGun",          // "MachineGun" | "Cannon"
   pitch = 0,
   pitchMin = -0.15,
@@ -10,5 +13,5 @@ export function createGun({
   muzzleVel = 350,
   cooldown = 0,
 } = {}) {
-  return { type, pitch, pitchMin, pitchMax, pitchSpeed, fireRate, ammo, spreadRad, muzzleVel, cooldown };
+  return { type, pitch, pitchMin, pitchMax, pitchSpeed, fireRate, ammo, spreadRad, muzzleVel, cooldown, recoilKick, recoilRecover, recoilOffset };
 }

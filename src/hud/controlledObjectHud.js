@@ -17,7 +17,10 @@ export function createControlledObjectHUD() {
         // Ensure turret is mounted to this hull
         if (parent.components.Mount?.parent === hullEnt.id) {
           const gun = g.components.Gun;
-          result.push({ id: g.id, type: gun.type, ammo: gun.ammo, cooldown: gun.cooldown });
+          const cd = gun.cooldown || 0;
+        const firePeriod = 1 / Math.max(0.0001, gun.fireRate || 1);
+        const coolPct = Math.min(100, Math.max(0, Math.round((cd / firePeriod) * 100)));
+        result.push({ id: g.id, type: gun.type, ammo: gun.ammo, cooldown: cd, coolPct });
         }
       }
     }
@@ -39,6 +42,7 @@ export function createControlledObjectHUD() {
     const registry = payload?.registry;
     if (!ent) {
       const weapons = registry ? collectWeapons(registry, ent) : [];
+    const selectedId = payload?.world?.weapons?.selectedId;
     renderKV(panel.body, [["status", "no controlled entity"]]);
       return;
     }
@@ -46,6 +50,7 @@ export function createControlledObjectHUD() {
     const isBall = !!ent.components?.Flight;
     const type = isBall ? "ball" : "tank";
     const weapons = registry ? collectWeapons(registry, ent) : [];
+    const selectedId = payload?.world?.weapons?.selectedId;
     renderKV(panel.body, [
       ["type", type],
       ["id", String(ent.id)],
@@ -54,8 +59,8 @@ export function createControlledObjectHUD() {
         t ? `(${t.position.x.toFixed(2)}, ${t.position.y.toFixed(2)}, ${t.position.z.toFixed(2)})` : "-"
       ],
       ["yaw", t ? t.rotation.yaw.toFixed(2) : "-"],
-      ["weapons", weapons.length? weapons.map(w=>w.type).join(", "): "-"],
-      ["ammo", weapons.length? weapons.map(w=>`${w.type[0]}:${w.ammo}`).join("  "): "-"],
+      ["weapons", weapons.length? weapons.map(w=> (w.id===selectedId? `*${w.type}*` : w.type)).join(", "): "-"],
+      ["ammo", weapons.length? weapons.map(w=>`${w.type[0]}:${w.ammo}${w.cooldown>0?` (reload ${w.coolPct}%)`:``}`).join("  "): "-"],
     ]);
   }
 

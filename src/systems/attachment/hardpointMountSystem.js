@@ -29,7 +29,10 @@ export function hardpointMountSystem(dt, world, registry) {
 
     // Child position (apply mount offset local first order small)
     const off = m.offset ?? { pos:{x:0,y:0,z:0}, yaw:0, pitch:0, roll:0 };
-    const ox = off.pos?.x ?? 0, oy = off.pos?.y ?? 0, oz = off.pos?.z ?? 0;
+    let ox = off.pos?.x ?? 0, oy = off.pos?.y ?? 0, oz = off.pos?.z ?? 0;
+    if (child.components?.Gun?.recoilOffset) {
+      ox -= child.components.Gun.recoilOffset; // push back along local X
+    }
     const cx = px + (ox * cy + oz * sy);
     const cz = pz + (oz * cy - ox * sy);
     const cyaw = (pt.rotation.yaw + (slot.localYaw ?? 0) + (off.yaw ?? 0));

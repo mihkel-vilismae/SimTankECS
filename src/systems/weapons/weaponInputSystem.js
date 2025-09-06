@@ -31,6 +31,7 @@ export function weaponInputSystem(dt, world, registry) {
       // spend ammo & set cooldown
       if (g.ammo !== Infinity) g.ammo -= 1;
       g.cooldown = 1.0 / Math.max(0.0001, g.fireRate);
+      g.recoilOffset = (g.recoilOffset || 0) + (g.recoilKick || 0.03);
       Logger.info("[weaponInputSystem] fired", { type: g.type, ammo: g.ammo });
       // (spawn projectiles in a separate system later)
     }
