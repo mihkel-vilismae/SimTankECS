@@ -7,7 +7,7 @@ import { Logger } from "../../utils/logger.js";
 export function weaponRecoilSystem(dt, world, registry) {
   const guns = registry.query(["Gun"]);
   for (const e of guns) {
-    const g = e.components.Gun;
+    const g = registry.getComponent(e, "Gun");
     const k = g.recoilRecover || 20; // spring constant (stiffness)
     const c = 2 * Math.sqrt(k);      // critical damping
     g._recoilVel = g._recoilVel || 0;

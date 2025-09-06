@@ -16,7 +16,7 @@ describe("tankFactory orientations", () => {
       const obj = e.object3D;
       // Barrel meshes are along local +Z due to rotation.x = PI/2 and positive z position for muzzle
       // We just assert their Transform yaw is inherited & pitch from Gun, initially 0.
-      const t = e.components.Transform;
+      const t = registry.getComponent(e, "Transform");
       expect(t.rotation.yaw).toBeDefined();
       expect(t.rotation.pitch).toBeDefined();
     }

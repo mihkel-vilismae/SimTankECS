@@ -13,13 +13,13 @@ export function weaponSelectionSystem(dt, world, registry) {
   const guns = registry.query(["Gun","Mount"]);
   const list = [];
   for (const e of guns) {
-    const parent = registry.getById(e.components.Mount.parent);
-    if (parent?.components?.Turret && parent.components.Mount?.parent === hullId) {
+    const parent = registry.getById(registry.getComponent(e, "Mount").parent);
+    if (parent?.components?.Turret && registry.getComponent(parent, "Mount")?.parent === hullId) {
       list.push(e);
     }
   }
   if (!list.length) return;
-  list.sort((a,b)=> (a.components.Gun.type < b.components.Gun.type ? -1 : 1));
+  list.sort((a,b)=> (registry.getComponent(a, "Gun").type < registry.getComponent(b, "Gun").type ? -1 : 1));
 
   world.weapons = world.weapons || {};
   if (!world.weapons.selectedId || !list.find(g => g.id === world.weapons.selectedId)) {

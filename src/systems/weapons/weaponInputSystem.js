@@ -17,9 +17,9 @@ export function weaponInputSystem(dt, world, registry) {
   // collect guns under the controlled hull
   const guns = registry.query(["Gun", "Mount"]);
   for (const e of guns) {
-    const parent = registry.getById(e.components.Mount.parent);
+    const parent = registry.getById(registry.getComponent(e, "Mount").parent);
     if (!parent?.components?.Turret) continue;
-    const g = e.components.Gun;
+    const g = registry.getComponent(e, "Gun");
     // tick cooldown
     g.cooldown = Math.max(0, g.cooldown - dt);
 

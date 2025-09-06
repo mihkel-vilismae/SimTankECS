@@ -10,7 +10,7 @@ describe("integration: arrow gizmo cleanup", () => {
     loop.step(0.016, loop.world);
     const count0 = scene.children.length;
     // remove component
-    delete ent.components.ArrowGizmo;
+    registry.removeComponent(ent, "ArrowGizmo");
     loop.step(0.016, loop.world);
     const count1 = scene.children.length;
     expect(count1).toBeLessThan(count0);

@@ -7,10 +7,10 @@ export function lookAtMouseSystem(dt, world, registry) {
   if (!targetId) return;
 
   const e = registry.getById?.(targetId);
-  if (!e || !e.components?.Transform || !e.components?.MouseFollower) return;
+  if (!e || !registry.getComponent(e, "Transform") || !registry.getComponent(e, "MouseFollower")) return;
 
-  const t = e.components.Transform;
-  const m = e.components.MouseFollower;
+  const t = registry.getComponent(e, "Transform");
+  const m = registry.getComponent(e, "MouseFollower");
   const p = world.mouse.worldPoint;
   const dx = p.x - t.position.x;
   const dz = p.z - t.position.z;

@@ -12,9 +12,9 @@ export function turretAimingSystem(dt, world, registry) {
 
   const turrets = registry.query(["Turret", "Mount", "Transform"]);
   for (const t of turrets) {
-    if (t.components.Mount.parent !== hullId) continue;
-    const tt = t.components.Turret;
-    const tr = t.components.Transform;
+    if (registry.getComponent(t, "Mount").parent !== hullId) continue;
+    const tt = registry.getComponent(t, "Turret");
+    const tr = registry.getComponent(t, "Transform");
     const target = world.mouse.worldPoint;
     const dx = target.x - tr.position.x;
     const dz = target.z - tr.position.z;

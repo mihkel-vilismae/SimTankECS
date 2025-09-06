@@ -5,13 +5,13 @@ export function weaponFireEventSystem(dt, world, registry) {
   world.vfxQueue = world.vfxQueue || [];
   const fired = registry.query(["Gun", "FireEvent", "Transform"]);
   for (const e of fired) {
-    const emitter = e.components.VfxEmitter;
-    const preset = emitter?.preset || (e.components.Gun.type === "Cannon" ? "CANNON_MUZZLE" : "MG_MUZZLE");
+    const emitter = registry.getComponent(e, "VfxEmitter");
+    const preset = emitter?.preset || (registry.getComponent(e, "Gun").type === "Cannon" ? "CANNON_MUZZLE" : "MG_MUZZLE");
 
     // Compute muzzle world position & forward
-    const t = e.components.Transform;
+    const t = registry.getComponent(e, "Transform");
     const yaw = t.rotation.yaw + (emitter?.localYaw ?? 0);
-    const pitch = (e.components.Gun.pitch || 0) + (emitter?.localPitch ?? 0);
+    const pitch = (registry.getComponent(e, "Gun").pitch || 0) + (emitter?.localPitch ?? 0);
     const cy = Math.cos(yaw), sy = Math.sin(yaw);
     const cp = Math.cos(pitch), sp = Math.sin(pitch);
 

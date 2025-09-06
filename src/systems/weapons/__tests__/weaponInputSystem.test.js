@@ -22,9 +22,9 @@ describe("weaponInputSystem", () => {
     const world = { control: { entityId: gunEnt.id }, input: { mouse: { down: true }, keys:{} } };
     // call once, should fire and set _recoilVel negative
     weaponInputSystem(1/60, world, registry);
-    expect(gunEnt.components.Gun._recoilVel).toBeLessThan(0);
-    expect(gunEnt.components.Gun.recoilOffset).toBeGreaterThanOrEqual(0);
-    expect(gunEnt.components.Gun.recoilOffset).toBeLessThanOrEqual(gunEnt.components.Gun.recoilMax);
+    expect(registry.getComponent(gunEnt, "Gun")._recoilVel).toBeLessThan(0);
+    expect(registry.getComponent(gunEnt, "Gun").recoilOffset).toBeGreaterThanOrEqual(0);
+    expect(registry.getComponent(gunEnt, "Gun").recoilOffset).toBeLessThanOrEqual(registry.getComponent(gunEnt, "Gun").recoilMax);
   });
 
   it("clamps recoilOffset within recoilMax immediately", () => {
@@ -39,6 +39,6 @@ describe("weaponInputSystem", () => {
     registry.add(gunEnt);
     const world = { control: { entityId: gunEnt.id }, input: { mouse: { down: true }, keys:{} } };
     weaponInputSystem(1/60, world, registry);
-    expect(gunEnt.components.Gun.recoilOffset).toBeLessThanOrEqual(0.05);
+    expect(registry.getComponent(gunEnt, "Gun").recoilOffset).toBeLessThanOrEqual(0.05);
   });
 });

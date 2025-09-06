@@ -7,13 +7,13 @@ import { Logger } from "../../utils/logger.js";
 export function hardpointMountSystem(dt, world, registry) {
   const mounts = registry.query(["Mount", "Transform"]);
   for (const child of mounts) {
-    const m = child.components.Mount;
+    const m = registry.getComponent(child, "Mount");
     if (!m?.parent || !m.slotId) continue;
     const parent = registry.getById(m.parent);
     if (!parent) continue;
-    const hp = parent.components?.Hardpoints;
-    const pt = parent.components?.Transform;
-    const ct = child.components.Transform;
+    const hp = registry.getComponent(parent, "Hardpoints");
+    const pt = registry.getComponent(parent, "Transform");
+    const ct = registry.getComponent(child, "Transform");
     if (!hp || !pt || !ct) continue;
 
     const slot = hp.slots?.find(s => s.id === m.slotId);
@@ -41,8 +41,8 @@ export function hardpointMountSystem(dt, world, registry) {
 
     // Recoil offset in world (only for guns)
     let recX = 0, recY = 0, recZ = 0;
-    if (child.components?.Gun) {
-      const g = child.components.Gun;
+    if (registry.hasComponent(child, "Gun")) {
+      const g = registry.getComponent(child, "Gun");
       const r = g.recoilOffset || 0;
       const pitch = g.pitch || 0;
       // Local recoil vector: (0, -r*sin(pitch), -r*cos(pitch))
@@ -60,9 +60,9 @@ export function hardpointMountSystem(dt, world, registry) {
 
     // Rotation yaw and pitch
     const cyaw = yaw + (off.yaw ?? 0);
-    ct.rotation.yaw = cyaw + (child.components?.Turret?.yaw ?? 0);
-    if (child.components?.Gun) {
-      ct.rotation.pitch = child.components.Gun.pitch;
+    ct.rotation.yaw = cyaw + (registry.getComponent(child, "Turret")?.yaw ?? 0);
+    if (registry.hasComponent(child, "Gun")) {
+      ct.rotation.pitch = registry.getComponent(child, "Gun").pitch;
     }
   }
   Logger.info("[hardpointMountSystem] applied");

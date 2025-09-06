@@ -15,7 +15,7 @@ describe("weaponInputSystem ammo/cooldown", () => {
     registry.add(e);
     const world = { control: { entityId: e.id }, input: { mouse: { down: true }, keys:{} } };
     weaponInputSystem(0, world, registry);
-    expect(e.components.Gun.ammo).toBe(4);
-    expect(e.components.Gun.cooldown).toBeGreaterThan(0);
+    expect(registry.getComponent(e, "Gun").ammo).toBe(4);
+    expect(registry.getComponent(e, "Gun").cooldown).toBeGreaterThan(0);
   });
 });
