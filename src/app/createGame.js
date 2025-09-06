@@ -94,7 +94,7 @@ export function createGame(canvas = document.getElementById("app")) {
   const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
   cameraHud.mount();
   window.addEventListener("keydown", (e) => {
-    const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit" };
+    const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit", Digit5: "follow_gun" };
     const m = map[e.code];
     if (m) { loop.world.cameraMode = m; cameraHud.update({ mode: m }); }
   });

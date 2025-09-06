@@ -11,23 +11,21 @@ export function createCameraModesHUD({ initialMode = "default", onChange } = {})
   const buttons = {};
   function render(mode) {
     panel.body.innerHTML = "";
-    const list = [
+    const items = [
       ["default", "default"],
       ["look", "look at"],
-      ["follow", "follow"],
+      ["follow", "follow hull"],
+      ["follow_gun", "follow gun"],
       ["orbit", "orbit"],
     ];
-    for (const [key, label] of list) {
+    items.forEach(([key, label]) => {
       const btn = createSelectableButton(label, {
-        active: mode === key,
-        onClick: () => {
-          update({ mode: key });
-          onChange?.(key);
-        },
+        active: key === mode,
+        onClick: () => { onChange && onChange(key); for (const k in buttons) setActive(buttons[k], k === key); }
       });
-      buttons[key] = btn;
       panel.body.appendChild(btn);
-    }
+      buttons[key] = btn;
+    });
   }
 
   function mount(container) {

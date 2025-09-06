@@ -8,6 +8,7 @@ import { lookAtMouseSystem } from "../systems/perception/lookAtMouseSystem.js";
 import { lookAtTargetSystem } from "../systems/camera/lookAtTargetSystem.js";
 import { createOrbitControlsSystem } from "../systems/camera/orbitControlsSystem.js";
 import { cameraFollowSystem } from "../systems/camera/cameraFollowSystem.js";
+import { cameraFollowGunSystem } from "../systems/camera/cameraFollowGunSystem.js";
 import { arrowGizmoSystemFactory } from "../systems/rendering/arrowGizmoSystem.js";
 import { crosshairSystem } from "../systems/rendering/crosshairSystem.js";
 import { hardpointMountSystem } from "../systems/attachment/hardpointMountSystem.js";
@@ -52,5 +53,6 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(orbitSystem);         // camera LOOK mode
   loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);
+  loop.addSystem(cameraFollowGunSystem);
   loop.addSystem(arrowGizmoSystem);
 }
