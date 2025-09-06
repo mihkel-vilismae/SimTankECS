@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { transformApplySystem } from "../src/systems/transformApplySystem.js";
+import { transformApplySystem } from "../src/systems/motion/transformApplySystem.js";
 
 describe("transformApplySystem", () => {
   it("mirrors Transform to object3D", () => {

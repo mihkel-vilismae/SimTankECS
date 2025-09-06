@@ -1,16 +1,16 @@
-import { movementInputSystem } from "../systems/movementInputSystem.js";
-import { flyInputSystem } from "../systems/flyInputSystem.js";
-import { movementTransformationSystem } from "../systems/movementTransformationSystem.js";
-import { flyMovementSystem } from "../systems/flyMovementSystem.js";
-import { transformApplySystem } from "../systems/transformApplySystem.js";
-import { mouseRaycastSystem } from "../systems/mouseRaycastSystem.js";
-import { lookAtMouseSystem } from "../systems/lookAtMouseSystem.js";
-import { lookAtTargetSystem } from "../systems/lookAtTargetSystem.js";
-import { createOrbitControlsSystem } from "../systems/orbitControlsSystem.js";
-import { cameraFollowSystem } from "../systems/cameraFollowSystem.js";
-import { arrowGizmoSystemFactory } from "../systems/arrowGizmoSystem.js";
+import { movementInputSystem } from "../systems/input/movementInputSystem.js";
+import { flyInputSystem } from "../systems/input/flyInputSystem.js";
+import { movementTransformationSystem } from "../systems/motion/movementTransformationSystem.js";
+import { flyMovementSystem } from "../systems/motion/flyMovementSystem.js";
+import { transformApplySystem } from "../systems/motion/transformApplySystem.js";
+import { mouseRaycastSystem } from "../systems/perception/mouseRaycastSystem.js";
+import { lookAtMouseSystem } from "../systems/perception/lookAtMouseSystem.js";
+import { lookAtTargetSystem } from "../systems/camera/lookAtTargetSystem.js";
+import { createOrbitControlsSystem } from "../systems/camera/orbitControlsSystem.js";
+import { cameraFollowSystem } from "../systems/camera/cameraFollowSystem.js";
+import { arrowGizmoSystemFactory } from "../systems/rendering/arrowGizmoSystem.js";
 
-export function registerSystems({ loop, scene, registry, camera, renderer }) {
+export function registerSystems({ loop, scene, registry }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD

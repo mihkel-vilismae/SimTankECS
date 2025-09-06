@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { movementInputSystem } from "../src/systems/movementInputSystem.js";
+import { movementInputSystem } from "../src/systems/input/movementInputSystem.js";
 
 describe("movementInputSystem", () => {
   it("maps keys to InputMove", () => {

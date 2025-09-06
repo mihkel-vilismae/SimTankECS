@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mouseRaycastSystem } from "../src/systems/mouseRaycastSystem.js";
+import { mouseRaycastSystem } from "../src/systems/perception/mouseRaycastSystem.js";
 
 describe("mouseRaycastSystem", () => {
   it("writes world.mouse.worldPoint when mouse present", () => {

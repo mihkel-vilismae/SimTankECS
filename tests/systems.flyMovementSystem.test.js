@@ -1,6 +1,6 @@
 
 import { describe, it, expect } from "vitest";
-import { flyMovementSystem } from "../src/systems/flyMovementSystem.js";
+import { flyMovementSystem } from "../src/systems/motion/flyMovementSystem.js";
 
 describe("flyMovementSystem", () => {
   it("applies vertical, forward, and lateral movement for controlled flyer", () => {

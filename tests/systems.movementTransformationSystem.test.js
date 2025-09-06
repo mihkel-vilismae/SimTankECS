@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { movementTransformationSystem } from "../src/systems/movementTransformationSystem.js";
+import { movementTransformationSystem } from "../src/systems/motion/movementTransformationSystem.js";
 
 describe("movementTransformationSystem", () => {
   it("applies forward motion and turning", () => {

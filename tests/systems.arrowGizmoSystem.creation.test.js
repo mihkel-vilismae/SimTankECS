@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { arrowGizmoSystemFactory } from "../src/systems/arrowGizmoSystem.js";
+import { arrowGizmoSystemFactory } from "../src/systems/rendering/arrowGizmoSystem.js";
 
 describe("arrowGizmoSystem", () => {
   it("creates and removes helpers", () => {

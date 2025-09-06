@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { lookAtMouseSystem } from "../src/systems/lookAtMouseSystem.js";
+import { lookAtMouseSystem } from "../src/systems/perception/lookAtMouseSystem.js";
 
 describe("lookAtMouseSystem", () => {
   it("lerps yaw toward mouse point for controlled entity", () => {

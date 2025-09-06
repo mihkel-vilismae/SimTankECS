@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cameraFollowSystem } from "../src/systems/cameraFollowSystem.js";
+import { cameraFollowSystem } from "../src/systems/camera/cameraFollowSystem.js";
 
 describe("cameraFollowSystem", () => {
   it("moves camera toward target", () => {

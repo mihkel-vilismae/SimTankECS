@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { flyInputSystem } from "../src/systems/flyInputSystem.js";
+import { flyInputSystem } from "../src/systems/input/flyInputSystem.js";
 
 describe("flyInputSystem", () => {
   it("maps Q/E and Shift to Flight of controlled only", () => {
