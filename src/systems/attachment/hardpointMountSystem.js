@@ -31,7 +31,11 @@ export function hardpointMountSystem(dt, world, registry) {
     const off = m.offset ?? { pos:{x:0,y:0,z:0}, yaw:0, pitch:0, roll:0 };
     let ox = off.pos?.x ?? 0, oy = off.pos?.y ?? 0, oz = off.pos?.z ?? 0;
     if (child.components?.Gun?.recoilOffset) {
-      ox -= child.components.Gun.recoilOffset; // push back along local X
+      const pitch = child.components.Gun.pitch || 0;
+      const r = child.components.Gun.recoilOffset;
+      // Apply recoil opposite to barrel (local -Z), factoring pitch into Y/Z
+      oy -= r * Math.sin(pitch);
+      oz -= r * Math.cos(pitch);
     }
     const cx = px + (ox * cy + oz * sy);
     const cz = pz + (oz * cy - ox * sy);

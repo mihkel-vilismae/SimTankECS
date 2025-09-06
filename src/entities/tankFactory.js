@@ -10,8 +10,8 @@ import { createGun } from "../components/gun.js";
 export function createTank(registry, scene) {
   // HULL (blue box)
   const hullMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1.2, 0.6, 2.0),
-      new THREE.MeshStandardMaterial({ color: 0x3388ff })
+    new THREE.BoxGeometry(1.2, 0.6, 2.0),
+    new THREE.MeshStandardMaterial({ color: 0x3388ff })
   );
   hullMesh.castShadow = true;
   hullMesh.position.y = 0.5;
@@ -34,8 +34,8 @@ export function createTank(registry, scene) {
 
   // TURRET (dark gray disc)
   const turretMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.6, 0.6, 0.2, 16),
-      new THREE.MeshStandardMaterial({ color: 0x444444 })
+    new THREE.CylinderGeometry(0.6, 0.6, 0.2, 16),
+    new THREE.MeshStandardMaterial({ color: 0x444444 })
   );
   turretMesh.castShadow = true;
 
@@ -55,19 +55,19 @@ export function createTank(registry, scene) {
   registry.add(turret);
   if (scene) scene.add(turret.object3D);
 
-  // MACHINE GUN (small barrel + receiver) → now forward along +Z
+  // MACHINE GUN (small barrel + receiver)
   const mgGroup = new THREE.Group();
   const mgBarrel = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.035, 0.035, 0.5, 12),
-      new THREE.MeshStandardMaterial({ color: 0x222222 })
+    new THREE.CylinderGeometry(0.035, 0.035, 0.5, 12),
+    new THREE.MeshStandardMaterial({ color: 0x222222 })
   );
-  mgBarrel.rotation.x = Math.PI / 2;   // was rotation.z
-  mgBarrel.position.z = 0.25;          // was position.x
+  mgBarrel.rotation.x = Math.PI / 2;
+  mgBarrel.position.z = 0.25;
   const mgBody = new THREE.Mesh(
-      new THREE.BoxGeometry(0.2, 0.1, 0.12),
-      new THREE.MeshStandardMaterial({ color: 0x111111 })
+    new THREE.BoxGeometry(0.2, 0.1, 0.12),
+    new THREE.MeshStandardMaterial({ color: 0x111111 })
   );
-  mgBody.position.z = 0.05;            // was position.x
+  mgBody.position.z = 0.05;
   mgGroup.add(mgBarrel, mgBody);
 
   const mg = {
@@ -82,17 +82,17 @@ export function createTank(registry, scene) {
   registry.add(mg);
   if (scene) scene.add(mg.object3D);
 
-  // CANNON (long barrel + muzzle brake) → centered on turret
+  // CANNON (long barrel + muzzle brake)
   const cannonGroup = new THREE.Group();
   const barrel = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.06, 0.06, 1.2, 16),
-      new THREE.MeshStandardMaterial({ color: 0x666666 })
+    new THREE.CylinderGeometry(0.06, 0.06, 1.2, 16),
+    new THREE.MeshStandardMaterial({ color: 0x666666 })
   );
   barrel.rotation.x = Math.PI / 2;
   barrel.position.z = 0.6;
   const muzzle = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.08, 0.16, 12),
-      new THREE.MeshStandardMaterial({ color: 0x888888 })
+    new THREE.CylinderGeometry(0.08, 0.08, 0.16, 12),
+    new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
   muzzle.rotation.x = Math.PI / 2;
   muzzle.position.z = 1.2;
