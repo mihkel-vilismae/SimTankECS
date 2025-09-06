@@ -8,7 +8,7 @@ describe("movementTransformationSystem", () => {
       InputMove: { forward: 1, turn: 1 },
       Locomotion: { speed: 10, turnRate: 1 }
     }};
-    const registry = { query: () => [ent] };
+    const registry = { query: () => [ent], getById:(id)=> id===1?ent:null };
     movementTransformationSystem(1.0, {}, registry);
     expect(ent.components.Transform.rotation.yaw).toBeGreaterThan(0);
     expect(ent.components.Transform.position.z).toBeGreaterThan(0);

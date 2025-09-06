@@ -32,7 +32,7 @@ class Mesh {
   constructor(geo, mat){ this.position=new Vector3(); this.rotation={x:0,y:0,z:0}; this.geo=geo; this.mat=mat; this.castShadow=false; }
 }
 class WebGLRenderer{
-  constructor(){ this._dom = {}; }
+  constructor(){ this._dom = { nodeType: 1 }; }
   setPixelRatio(){} setSize(){} get domElement(){ return this._dom; }
   render(){}
   get shadowMap(){ return { enabled: false, set enabled(v){} }; }
@@ -47,6 +47,8 @@ class SphereGeometry{ constructor(){} }
 class MeshBasicMaterial{ constructor(o){ this.o=o; } }
 const BackSide = "BackSide";
 class BoxGeometry{ constructor(){} }
+class AmbientLight{ constructor(){}}
+class DirectionalLight{ constructor(){ this.position = new Vector3(); this.castShadow = false; this.shadow = { mapSize: { set(){} }, camera: { } }; }}
 
 // ---- Raycasting mocks ----
 class Ray {
@@ -94,5 +96,7 @@ vi.mock("three", () => {
     BoxGeometry,
     Raycaster,
     Plane,
+    AmbientLight,
+    DirectionalLight,
   };
 });
