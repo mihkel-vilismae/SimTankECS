@@ -24,7 +24,7 @@ export function weaponElevationSystem(dt, world, registry) {
     const dy = target.y - tr.position.y;
     const dz = target.z - tr.position.z;
     const horizontalDist = Math.max(1e-5, Math.hypot(dx, dz));
-    const desiredPitch = Math.atan2(dy, horizontalDist);
+    const desiredPitch = -Math.atan2(dy, horizontalDist); // invert so mouse-up pitches gun up
 
     const step = Math.sign(desiredPitch - gt.pitch) * gt.pitchSpeed * dt;
     let next = gt.pitch + step;
