@@ -1,4 +1,5 @@
 import { Logger } from "../../utils/logger.js";
+import { muzzleForward, rotateXZByYaw } from "../../aim/math.js";
 
 /** Collect FireEvent from guns into world.vfxQueue and clear the event. */
 export function weaponFireEventSystem(dt, world, registry) {
@@ -12,19 +13,14 @@ export function weaponFireEventSystem(dt, world, registry) {
     const t = registry.getComponent(e, "Transform");
     const yaw = t.rotation.yaw + (emitter?.localYaw ?? 0);
     const pitch = (registry.getComponent(e, "Gun").pitch || 0) + (emitter?.localPitch ?? 0);
-    const cy = Math.cos(yaw), sy = Math.sin(yaw);
-    const cp = Math.cos(pitch), sp = Math.sin(pitch);
-
     const lp = emitter?.localPos || { x:0, y:0, z:0.55 };
-    const offX = (lp.x * cy + lp.z * sy);
-    const offZ = (lp.z * cy - lp.x * sy);
+    const off = rotateXZByYaw(lp.x, lp.z, yaw);
     const worldPos = {
-      x: t.position.x + offX,
+      x: t.position.x + off.x,
       y: t.position.y + (lp.y || 0),
-      z: t.position.z + offZ,
+      z: t.position.z + off.z,
     };
-    // forward (+Z rotated by yaw/pitch)
-    const forward = { x: cp * sy, y: sp, z: cp * cy };
+    const forward = muzzleForward(yaw, pitch);
 
     world.vfxQueue.push({ entityId: e.id, preset, worldPos, forward });
 
