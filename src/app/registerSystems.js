@@ -9,6 +9,7 @@ import { lookAtTargetSystem } from "../systems/camera/lookAtTargetSystem.js";
 import { createOrbitControlsSystem } from "../systems/camera/orbitControlsSystem.js";
 import { cameraFollowSystem } from "../systems/camera/cameraFollowSystem.js";
 import { arrowGizmoSystemFactory } from "../systems/rendering/arrowGizmoSystem.js";
+import { crosshairSystem } from "../systems/rendering/crosshairSystem.js";
 import { hardpointMountSystem } from "../systems/attachment/hardpointMountSystem.js";
 import { turretAimingSystem } from "../systems/aim/turretAimingSystem.js";
 import { weaponElevationSystem } from "../systems/aim/weaponElevationSystem.js";
@@ -32,6 +33,8 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
 
   // Aiming & mounting happen before we mirror Transforms to object3D
   loop.addSystem(mouseRaycastSystem);
+  // UI crosshair follows raycast hit
+  loop.addSystem(crosshairSystem);
   loop.addSystem(turretAimingSystem);
   loop.addSystem(weaponElevationSystem);
   loop.addSystem(hardpointMountSystem);
