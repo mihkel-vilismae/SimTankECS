@@ -3,7 +3,8 @@ import { Logger } from "../../utils/logger.js";
 /** Collect FireEvent from guns into world.vfxQueue and clear the event. */
 export function weaponFireEventSystem(dt, world, registry) {
   world.vfxQueue = world.vfxQueue || [];
-  for (const e of registry.query(["Gun", "FireEvent", "Transform"])) {
+  const fired = registry.query(["Gun", "FireEvent", "Transform"]);
+  for (const e of fired) {
     const emitter = e.components.VfxEmitter;
     const preset = emitter?.preset || (e.components.Gun.type === "Cannon" ? "CANNON_MUZZLE" : "MG_MUZZLE");
 
@@ -26,7 +27,11 @@ export function weaponFireEventSystem(dt, world, registry) {
     const forward = { x: cp * sy, y: sp, z: cp * cy };
 
     world.vfxQueue.push({ entityId: e.id, preset, worldPos, forward });
-    registry.removeComponent(e, "FireEvent");
+
+    // registry has no removeComponent; just delete the marker from the entity
+    if (e.components && e.components.FireEvent) {
+      delete e.components.FireEvent;
+    }
     Logger.info("[weaponFireEventSystem] queued VFX", { preset });
   }
 }
