@@ -29,9 +29,7 @@ export function weaponFireEventSystem(dt, world, registry) {
     world.vfxQueue.push({ entityId: e.id, preset, worldPos, forward });
 
     // registry has no removeComponent; just delete the marker from the entity
-    if (e.components && e.components.FireEvent) {
-      delete e.components.FireEvent;
-    }
+    registry.removeComponent(e, "FireEvent");
     Logger.info("[weaponFireEventSystem] queued VFX", { preset });
   }
 }

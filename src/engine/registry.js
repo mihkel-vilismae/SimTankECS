@@ -23,5 +23,24 @@ export function createRegistry() {
   }
   function nextId() { return _nextId++; }
 
-  return { add, remove, getById, query, nextId, entities };
+  // --- ECS-style helpers ---
+  function addComponent(entity, name, data = {}) {
+    if (!entity.components) entity.components = {};
+    entity.components[name] = data;
+    Logger.info("[registry] addComponent", { id: entity.id, name });
+  }
+  function removeComponent(entity, name) {
+    if (entity?.components && entity.components[name]) {
+      delete entity.components[name];
+      Logger.info("[registry] removeComponent", { id: entity.id, name });
+    }
+  }
+  function hasComponent(entity, name) {
+    return !!(entity?.components && entity.components[name]);
+  }
+  function getComponent(entity, name) {
+    return entity?.components ? entity.components[name] : undefined;
+  }
+
+  return { add, remove, getById, query, nextId, entities, addComponent, removeComponent, hasComponent, getComponent };
 }

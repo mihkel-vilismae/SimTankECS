@@ -35,7 +35,7 @@ export function weaponInputSystem(dt, world, registry) {
       g.recoilOffset = Math.max(0, Math.min(g.recoilMax ?? 0.2, g.recoilOffset || 0));
       Logger.info("[weaponInputSystem] fired", { type: g.type, ammo: g.ammo });
       // Raise a FireEvent for VFX
-      e.components.FireEvent = { count: 1, time: world.time || 0 };
+      registry.addComponent(e, "FireEvent", { count: 1, time: world.time || 0 });
       // (spawn projectiles in a separate system later)
     }
   }
