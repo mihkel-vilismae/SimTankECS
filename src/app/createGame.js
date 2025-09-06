@@ -19,6 +19,7 @@ import { createHud } from "../hud/createHud.js";
 import { createControlledObjectHUD } from "../hud/controlledObjectHud.js";
 import { createTestButtonsHUD } from "../hud/testButtonsHud.js";
 import { hudUpdateSystemFactory } from "../systems/hudUpdateSystem.js";
+import { createCameraModesHUD } from "../hud/cameraModesHud.js";
 
 export function createGame(canvas = document.getElementById("app")) {
   const scene = createScene();
@@ -39,6 +40,7 @@ export function createGame(canvas = document.getElementById("app")) {
   scene.add(ball.object3D);
 
   // Controlled entity state (default: tank)
+  loop.world.cameraMode = "default";
   loop.world.control = {
     entityId: tank.id,
   };
@@ -74,8 +76,8 @@ export function createGame(canvas = document.getElementById("app")) {
   // Systems
   registerSystems({ loop, scene, registry, camera });
   const controlledHud = createControlledObjectHUD();
-  // Set initial data so it's visible before the first frame
-  controlledHud.setData(getControlledEntity());
+  controlledHud.mount();
+  controlledHud.update(getControlledEntity());
   const hudUpdateSystem = hudUpdateSystemFactory(controlledHud, getControlledEntity);
   loop.addSystem(hudUpdateSystem);
 
@@ -83,8 +85,10 @@ export function createGame(canvas = document.getElementById("app")) {
   const detachInput = attachInput(loop.world);
   const detachMouse = attachMouse(loop.world, canvas);
   const hud = createHud();
-  hud.setMessage("WSAD drive, A/D turn. Q/E up/down (ball). Mouse to aim.");
-  createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });
+  hud.mount();
+  hud.update({ text: "Tank: WSAD (A/D turn).  Ball: WSAD (A/D slide) + Q/E up/down + Mouse aim." });
+  const testButtons = createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });
+  testButtons.mount();
 
   const detachResize = setupResize(renderer, camera);
   Logger.info("[createGame] world ready (tank + ball)");

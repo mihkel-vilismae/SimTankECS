@@ -2,6 +2,8 @@ import { lerp } from "../utils/math3d.js";
 import { Logger } from "../utils/logger.js";
 
 export function cameraFollowSystem(dt, world, registry) {
+  if (world.cameraMode !== "follow") return;
+
   let target = null;
   const id = world.control?.entityId;
   if (id) target = registry.getById?.(id);

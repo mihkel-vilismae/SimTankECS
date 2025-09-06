@@ -1,18 +1,34 @@
-import { createPanel, createButton, ensureHudRoot } from "./hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot, createButton } from "./hudCommon.js";
 
+/**
+ * TestButtonsHUD
+ * Buttons to spawn/switch/remove entities.
+ * Uniform interface: { mount, unmount, update(actions) }
+ */
 export function createTestButtonsHUD(actions) {
-  const { root, body } = createPanel({ id: "hud-testbuttons", title: "TestButtonsHUD" });
-  ensureHudRoot().appendChild(root);
+  const panel = createPanel({ id: "hud-testbuttons", title: "TestButtonsHUD" });
 
-  const addBallBtn = createButton("add new ball", actions.addBall);
-  const addTankBtn = createButton("add new tank", actions.addTank);
-  const switchBtn  = createButton("switch Controlled object", actions.switchControlled);
-  const removeBtn  = createButton("remove all balls and tank from world", actions.removeAll);
+  function renderButtons(a) {
+    panel.body.innerHTML = "";
+    panel.body.appendChild(createButton("add new ball", a?.addBall));
+    panel.body.appendChild(createButton("add new tank", a?.addTank));
+    panel.body.appendChild(createButton("switch Controlled object", a?.switchControlled));
+    panel.body.appendChild(createButton("remove all balls and tank from world", a?.removeAll));
+  }
 
-  body.appendChild(addBallBtn);
-  body.appendChild(addTankBtn);
-  body.appendChild(switchBtn);
-  body.appendChild(removeBtn);
+  function mount(container) {
+    mountPanel(panel, container ?? ensureHudRoot());
+    renderButtons(actions);
+  }
 
-  return {};
+  function unmount() {
+    destroyPanel(panel);
+  }
+
+  function update(newActions) {
+    actions = { ...actions, ...newActions };
+    renderButtons(actions);
+  }
+
+  return { mount, unmount, update };
 }

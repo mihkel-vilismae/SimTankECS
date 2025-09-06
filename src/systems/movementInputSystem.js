@@ -7,10 +7,24 @@ export function movementInputSystem(dt, world, registry) {
 
   const targetId = world.control?.entityId;
   const ents = registry.query(["InputMove"]);
+
+  // Zero everyone first
   for (const ent of ents) {
-    if (targetId && ent.id !== targetId) continue; // only apply to controlled entity when set
-    ent.components.InputMove.forward = forward;
-    ent.components.InputMove.turn = turn;
+    ent.components.InputMove.forward = 0;
+    ent.components.InputMove.turn = 0;
   }
-  Logger.info("[movementInputSystem] keys", { forward, turn, targetId });
+
+  if (!targetId) {
+    Logger.info("[movementInputSystem] no controlled entity");
+    return;
+  }
+  const target = registry.getById?.(targetId);
+  if (!target || !target.components?.InputMove) {
+    Logger.info("[movementInputSystem] target missing or not drivable", { targetId });
+    return;
+  }
+  target.components.InputMove.forward = forward;
+  target.components.InputMove.turn = turn;
+
+  Logger.info("[movementInputSystem] applied to controlled", { forward, turn, targetId });
 }

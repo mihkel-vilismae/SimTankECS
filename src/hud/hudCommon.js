@@ -1,21 +1,54 @@
 /**
  * Common DOM helpers for HUD panels
+ * All HUDs should use: createPanel -> mountPanel -> destroyPanel
+ */
+
+export function ensureHudRoot() {
+  let root = document.getElementById("hud-root");
+  if (!root) {
+    root = document.createElement("div");
+    root.id = "hud-root";
+    document.body.appendChild(root);
+  }
+  let panels = document.getElementById("hud-panels");
+  if (!panels) {
+    panels = document.createElement("div");
+    panels.id = "hud-panels";
+    root.appendChild(panels);
+  }
+  return panels;
+}
+
+/**
+ * @param {{id?: string, title: string}} opts
+ * @returns {{root:HTMLElement, header:HTMLElement, body:HTMLElement}}
  */
 export function createPanel({ id, title }) {
   const root = document.createElement("div");
-  root.className = "hud-panel";
   if (id) root.id = id;
+  root.className = "hud-panel";
 
-  const h = document.createElement("div");
-  h.className = "hud-title";
-  h.textContent = title;
+  const header = document.createElement("div");
+  header.className = "hud-title";
+  header.textContent = title;
 
   const body = document.createElement("div");
   body.className = "hud-body";
 
-  root.appendChild(h);
+  root.appendChild(header);
   root.appendChild(body);
-  return { root, body, titleEl: h };
+
+  return { root, header, body };
+}
+
+export function mountPanel(panel, container = ensureHudRoot()) {
+  container.appendChild(panel.root);
+}
+
+export function destroyPanel(panel) {
+  if (panel?.root?.parentElement) {
+    panel.root.parentElement.removeChild(panel.root);
+  }
 }
 
 export function createButton(label, onClick) {
@@ -30,6 +63,7 @@ export function createButton(label, onClick) {
   return btn;
 }
 
+/** Render key–value rows inside a panel body */
 export function renderKV(body, rows) {
   body.innerHTML = "";
   for (const [k, v] of rows) {
@@ -47,19 +81,16 @@ export function renderKV(body, rows) {
   }
 }
 
-export function ensureHudRoot() {
-  let root = document.getElementById("hud-root");
-  if (!root) {
-    root = document.createElement("div");
-    root.id = "hud-root";
-    document.body.appendChild(root);
-  }
-  // panels container
-  let panels = document.getElementById("hud-panels");
-  if (!panels) {
-    panels = document.createElement("div");
-    panels.id = "hud-panels";
-    root.appendChild(panels);
-  }
-  return panels;
+
+/** Mark/unmark an element as active (for toggle groups) */
+export function setActive(el, isActive) {
+  if (!el) return;
+  el.classList.toggle("active", !!isActive);
+}
+
+/** Create a selectable button with 'active' highlight */
+export function createSelectableButton(label, { onClick, active = false } = {}) {
+  const btn = createButton(label, onClick);
+  if (active) btn.classList.add("active");
+  return btn;
 }

@@ -62,3 +62,10 @@
 #hud-root { z-index: 9999; pointer-events: none; }
 #hud-panels { pointer-events: auto; }
 .hud-btn { pointer-events: auto; }
+
+
+/* Active button highlight */
+.hud-btn.active {
+  outline: 2px solid rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.25);
+}

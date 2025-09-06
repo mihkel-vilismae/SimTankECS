@@ -7,11 +7,12 @@ describe("integration: ball can fly and aim with mouse", () => {
     const { loop, registry, camera } = createGame(document.getElementById("app"));
     const ents = Array.from(registry.entities.values());
     const ball = ents.find(e => e.components.Flight);
+    loop.world.control.entityId = ball.id;
     const t = ball.components.Transform;
 
     // set mouse NDC center so ray hits ahead; also press Q for climb
     loop.world.input.mouse = { x: 0.2, y: -0.2, down: false, wheelDelta: 0 };
-    loop.world.input.keys["KeyQ"] = true;
+    loop.world.input.keys["KeyQ"] = true; loop.world.input.keys["KeyD"] = true;
 
     const y0 = t.position.y;
     const yaw0 = t.rotation.yaw;
