@@ -15,6 +15,7 @@ export function createCameraModesHUD({ initialMode = "default", onChange } = {})
       ["default", "default"],
       ["look", "look at"],
       ["follow", "follow"],
+      ["orbit", "orbit"],
     ];
     for (const [key, label] of list) {
       const btn = createSelectableButton(label, {

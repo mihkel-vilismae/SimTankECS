@@ -6,10 +6,11 @@ import { transformApplySystem } from "../systems/transformApplySystem.js";
 import { mouseRaycastSystem } from "../systems/mouseRaycastSystem.js";
 import { lookAtMouseSystem } from "../systems/lookAtMouseSystem.js";
 import { lookAtTargetSystem } from "../systems/lookAtTargetSystem.js";
+import { createOrbitControlsSystem } from "../systems/orbitControlsSystem.js";
 import { cameraFollowSystem } from "../systems/cameraFollowSystem.js";
 import { arrowGizmoSystemFactory } from "../systems/arrowGizmoSystem.js";
 
-export function registerSystems({ loop, scene, registry }) {
+export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD
@@ -17,7 +18,9 @@ export function registerSystems({ loop, scene, registry }) {
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
   loop.addSystem(transformApplySystem);
-  loop.addSystem(lookAtTargetSystem);         // camera LOOK mode
+  loop.addSystem(lookAtTargetSystem);
+  const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
+  loop.addSystem(orbitSystem);         // camera LOOK mode
   loop.addSystem(mouseRaycastSystem);         // camera → ground hit
   loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);

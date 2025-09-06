@@ -74,7 +74,7 @@ export function createGame(canvas = document.getElementById("app")) {
   }
 
   // Systems
-  registerSystems({ loop, scene, registry, camera });
+  registerSystems({ loop, scene, registry, camera, renderer });
   const controlledHud = createControlledObjectHUD();
   controlledHud.mount();
   controlledHud.update(getControlledEntity());
@@ -89,6 +89,15 @@ export function createGame(canvas = document.getElementById("app")) {
   hud.update({ text: "Tank: WSAD (A/D turn).  Ball: WSAD (A/D slide) + Q/E up/down + Mouse aim." });
   const testButtons = createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });
   testButtons.mount();
+
+  // Camera modes HUD (always shown)
+  const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
+  cameraHud.mount();
+  window.addEventListener("keydown", (e) => {
+    const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit" };
+    const m = map[e.code];
+    if (m) { loop.world.cameraMode = m; cameraHud.update({ mode: m }); }
+  });
 
   const detachResize = setupResize(renderer, camera);
   Logger.info("[createGame] world ready (tank + ball)");
