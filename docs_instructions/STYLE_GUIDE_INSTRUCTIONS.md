@@ -12,7 +12,6 @@ _Version: v1.4 – 2025-09-09 23:05:48 Europe/Tartu_
 #### - Always ask for clarification if the user’s request is ambiguous or incomplete.
 
 
-
 ## Project-Specific Instructions
 🚜 **Tank + Movement**
 
