@@ -39,6 +39,20 @@ export function projectileFlightSystem(dt, world, registry) {
     t.position.y += v.y * dt;
     t.position.z += v.z * dt;
 
+    // Bullet faint trail
+    if (p.kind === "bullet") {
+      e._trailAcc = (e._trailAcc || 0) + dt;
+      const interval = 1/10;
+      if (e._trailAcc >= interval) {
+        e._trailAcc -= interval;
+        world.vfxQueue.push({
+          preset: "BULLET_TRAIL_PUFF",
+          worldPos: { x: t.position.x, y: t.position.y, z: t.position.z },
+          forward: { x: -v.x, y: -v.y, z: -v.z }
+        });
+      }
+    }
+
     // Orient to velocity
     const len = Math.hypot(v.x, v.y, v.z) || 1;
     const yaw = Math.atan2(v.x, v.z);
