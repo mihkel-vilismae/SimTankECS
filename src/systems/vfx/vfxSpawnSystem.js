@@ -14,7 +14,21 @@ export function vfxSpawnSystem(dt, world, registry) {
   world.vfxActive = world.vfxActive || [];
 
   const queue = world.vfxQueue.splice(0);
+  const presetEvents = [];
   for (const evt of queue) {
+    if (evt && evt.kind === 'BALL_GROW') {
+      const geom = new THREE.SphereGeometry(evt.size0 || 0.15, 16, 12);
+      const mat  = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set(evt.worldPos.x, evt.worldPos.y, evt.worldPos.z);
+      scene.add(mesh);
+      world.vfxActive.push({ kind:'ballGrow', obj: mesh, t: 0, life: (evt.life || 10.0), size0: (evt.size0 || 0.15), size1: (evt.size1 || 3.5) });
+    } else if (evt && evt.preset) {
+      presetEvents.push(evt);
+    }
+  }
+  if (presetEvents.length === 0) return;
+  for (const evt of presetEvents) {
     const p = VFX_PRESETS[evt.preset];
     if (!p) continue;
 

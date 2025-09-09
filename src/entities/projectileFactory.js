@@ -7,22 +7,27 @@ import { createTracer } from "../components/tracer.js";
 
 export function spawnBullet(registry, scene, position, forward) {
   return spawnProjectile(registry, scene, position, forward, {
-    kind: "bullet", speed: 800, tracer: { length: 5, width: 0.04, color: 0xFFD080 }
+    kind: "bullet", speed: 300,
+    tracer: { length: 4, width: 0.035, color: 0xE8F7A0 },
+    coreRadius: 0.025, coreColor: 0xffffff
   });
 }
 export function spawnShell(registry, scene, position, forward) {
   return spawnProjectile(registry, scene, position, forward, {
-    kind: "shell", speed: 250, tracer: { length: 7, width: 0.08, color: 0xFFA500 }
+    kind: "shell", speed: 120,
+    tracer: { length: 8, width: 0.09, color: 0xFF8C00 },
+    coreRadius: 0.07, coreColor: 0xFF5500
   });
 }
 
 function spawnProjectile(registry, scene, position, forward, opts) {
   const eid = registry.nextId();
   const group = new THREE.Group();
-  // tiny visible core
+
+  // Visible core (distinct sizes/colors)
   const core = new THREE.Mesh(
-    new THREE.SphereGeometry(opts.kind === "shell" ? 0.06 : 0.03, 8, 8),
-    new THREE.MeshBasicMaterial({ color: 0xffffff })
+    new THREE.SphereGeometry(opts.coreRadius, 12, 8),
+    new THREE.MeshBasicMaterial({ color: opts.coreColor })
   );
   core.name = "projectile-core";
   group.add(core);

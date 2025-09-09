@@ -12,6 +12,21 @@ export const VFX_PRESETS = {
     smoke: { count: 28, size: [0.35, 0.9], life: [1.2, 2.2], drift: [0.6,1.2], upward: 1.0 },
     sparks:{ count: 26, speed: [6,13], life: [0.15,0.35], gravity: -12, spread: 0.5 },
     shock: { enabled: true, radius: 1.2, life: 0.06 },
-    sound: "cannon_fire_01",
+    sound: "cannon_fire_01"
+  },
+  SHELL_EXPLOSION_LARGE: {
+    flash: { sprites: 3, size: [1.2, 2.2], life: 0.12, color: 0xfff5c0 },
+    light: { intensity: 7.0, radius: 9.0, decay: 6, life: 0.30 },
+    smoke: { count: 64, size: [0.7, 1.8], life: [2.0, 3.8], drift: [0.8,1.6], upward: 1.2 },
+    sparks:{ count: 120, speed: [9,18], life: [0.8,1.4], gravity: -14, spread: 0.9 },
+    shock: { enabled: true, radius: 2.6, life: 0.14 },
+    sound: "big_explosion_01"
+  },
+  BULLET_SPARK_STORM: {
+    flash: { sprites: 1, size: [0.4, 0.7], life: 0.10, color: 0xfff2cc },
+    light: { intensity: 2.2, radius: 3.5, decay: 4, life: 0.30 },
+    smoke: { count: 14, size: [0.25, 0.55], life: [0.9, 1.6], drift: [0.4,0.9], upward: 0.7 },
+    sparks:{ count: 220, speed: [6,13], life: [1.2,2.0], gravity: -11, spread: 1.2 },
+    shock: { enabled: false }
   }
 };
