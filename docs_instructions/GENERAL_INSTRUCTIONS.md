@@ -1,4 +1,5 @@
-_Version: v1.3 – 2025-09-09 22:45:44 EEST_
+_Version: v1.4 – 2025-09-09 23:05:48 Europe/Tartu_
+
 
 
 
@@ -32,4 +33,4 @@ _Version: v1.3 – 2025-09-09 22:45:44 EEST_
 
 ## Changelog
 
-- 2025-09-09 – v1.1: Added version markers to all instruction files; created Smoke Test Checklist.- 2025-09-09 19:30:46 – v1.1: Added time to version markers in all instruction files; created standalone CHANGELOG.md.- 2025-09-09 19:40:58 – v1.2: Auto-incremented version and regenerated instruction bundle.- 2025-09-09 22:45:44 EEST – v1.3: Auto-incremented version and regenerated instruction bundle.
+- 2025-09-09 – v1.1: Added version markers to all instruction files; created Smoke Test Checklist.- 2025-09-09 19:30:46 – v1.1: Added time to version markers in all instruction files; created standalone CHANGELOG.md.- 2025-09-09 19:40:58 – v1.2: Auto-incremented version and regenerated instruction bundle.- 2025-09-09 22:45:44 EEST – v1.3: Auto-incremented version and regenerated instruction bundle.- 2025-09-09 23:05:48 Europe/Tartu – v1.4: Updated AUTO_ACTIONS to include [response_end] line; auto-bumped version and regenerated bundle.

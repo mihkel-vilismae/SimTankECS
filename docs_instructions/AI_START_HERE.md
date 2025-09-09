@@ -1,6 +1,8 @@
 # AI_START_HERE.md
 
-_Version: v1.3 – 2025-09-09 22:45:44 EEST_
+_Version: v1.4 – 2025-09-09 23:05:48 Europe/Tartu_
+
+
 
 
 

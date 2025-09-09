@@ -1,6 +1,8 @@
 # AUTO_ACTIONS.md
 
-_Version: v1.3 – 2025-09-09 22:45:44 EEST_
+_Version: v1.4 – 2025-09-09 23:05:48 Europe/Tartu_
+
+
 
 
 
@@ -26,3 +28,13 @@ _Version: v1.3 – 2025-09-09 22:45:44 EEST_
 
 - **If AUTO_ACTIONS.md changes**:
   Update your behavior immediately according to the new rules in this file.
+
+## Timestamp formatting (required for every reply)
+Prepend two lines and append one line:
+```
+[prompt at: YYYY-MM-DD HH:MM:SS Europe/Tartu]
+[response at: YYYY-MM-DD HH:MM:SS Europe/Tartu]
+...
+[response_end at: YYYY-MM-DD HH:MM:SS Europe/Tartu]
+```
+- Always use Europe/Tartu in the labels. Use local Estonia time for the actual timestamp.
