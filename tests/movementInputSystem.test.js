@@ -1,8 +1,7 @@
-
 import { describe, it, expect, beforeEach } from "vitest";
-import { movementInputSystem } from "../movementInputSystem.js";
-import { createRegistry } from "../../../engine/registry.js";
-import { createInputMove } from "../../../components/motion.js";
+import { movementInputSystem } from "../src/systems/input/movementInputSystem.js";
+import { createRegistry } from "../src/engine/registry.js";
+import { createInputMove } from "../src/components/motion.js";
 
 function makeWorld() {
   return {

@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { weaponElevationSystem } from "../weaponElevationSystem.js";
-import { createGun } from "../../../components/gun.js";
-import { createTransform } from "../../../components/transform.js";
-import { createHardpoints } from "../../../components/hardpoints.js";
+import { weaponElevationSystem } from "../src/systems/aim/weaponElevationSystem.js";
+import { createGun } from "../src/components/gun.js";
+import { createTransform } from "../src/components/transform.js";
+import { createHardpoints } from "../src/components/hardpoints.js";
 
 function makeReg() {
-  const { createRegistry } = require("../../../engine/registry.js");
+  const { createRegistry } = require("../src/engine/registry.js");
   return createRegistry();
 }
 

@@ -1,9 +1,9 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
-import { movementTransformationSystem } from "../movementTransformationSystem.js";
-import { createTransform } from "../../../components/transform.js";
-import { createInputMove, createLocomotion } from "../../../components/motion.js";
-import { createRegistry } from "../../../engine/registry.js";
+import { movementTransformationSystem } from "../src/systems/motion/movementTransformationSystem.js";
+import { createTransform } from "../src/components/transform.js";
+import { createInputMove, createLocomotion } from "../src/components/motion.js";
+import { createRegistry } from "../src/engine/registry.js";
 
 function makeWorld(entityId) {
   return {
