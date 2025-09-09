@@ -1,16 +1,14 @@
-📋 FULL INSTRUCTIONS (SimTankFrom0_weapons)
-# General Development
 
-Always think like a senior developer.
-
-Before writing any code, always tell the user which files you want to modify or create.
-
-If the user doesn’t give specific file-related orders, prefer modifying existing files instead of creating new ones.
+# General Development Instructions
+#### - Always think like a senior developer.
+#### - Before writing any code, always tell the user which files you want to modify or create.
+#### - If the user doesn’t give specific file-related orders, prefer modifying existing files instead of creating new ones.
+#### - Always ask for clarification if the user’s request is ambiguous or incomplete.
 
 ~~Logging rules (simtank_log.txt, prompt_log_v2.txt) are completely removed — do not reintroduce them.~~
 ~~No “File Handling Rules” active anymore.~~
 
-# Project-Specific Instructions
+## Project-Specific Instructions
 🚜 **Tank + Movement**
 
 - The hull of every object must always face the movement direction (same as the arrow drawn on the ground).
@@ -23,16 +21,12 @@ If the user doesn’t give specific file-related orders, prefer modifying existi
 
 **🎯 Turret + Weapons**
 
-~~Tanks should use both:~~
-~~turretSystem~~
-~~followsMouseSystem~~
-
-Turret rotates with the mouse.
-Gun moves up/down following the mouse.
-Weapons (machine gun, cannon, etc.) must be distinct and attached via hardpoints:
-Turret attached.
-Guns attached.
-Selected gun & turret must aim precisely at the crosshair.
+- Turret rotates with the mouse.
+- Gun moves up/down following the mouse.
+- Weapons (machine gun, cannon, etc.) must be distinct and attached via hardpoints:
+- Turret attached.
+- Guns attached.
+- Selected gun & turret must aim precisely at the crosshair.
 
 **🎥 Camera + HUD**
 
@@ -51,7 +45,7 @@ Existing camera modes remain (e.g., follow hull).
 ~~###### Keybinding (src/app/createGame.js):~~
 ~~- Digit5 → switches to "follow_gun" mode.~~
 
-# Code Style Instructions
+## Code Style Instructions
 **📦 Project Structure**
 
 **Follow ECS architecture strictly:**
@@ -59,10 +53,19 @@ Existing camera modes remain (e.g., follow hull).
 - Components = plain data (no logic).
 - Systems = logic operating on components.
 
-Keep HUD/UI in src/hud/.
-Keep game world systems in src/systems/.
-Keep setup/bootstrapping in src/app/.
-Keep tests in src/tests/.
+
+- Keep HUD/UI in src/hud/.
+- Keep game world systems in src/systems/.
+- Keep setup/bootstrapping in src/app/.
+- Keep tests in src/tests/.
+
+**🛠️ Best Practices**
+
+- Keep systems small and focused — one responsibility each.
+- Avoid duplicate logic → factor into helpers if reused.
+- Use smooth transitions (lerp, damping) for camera, movement, aiming.
+- Always ensure frame-rate independence (time delta aware).
+- Keep UI responsive to game state changes (sync highlighting, buttons, etc.).
 
 **📝 Coding Standards**
 
@@ -73,33 +76,19 @@ Keep tests in src/tests/.
 - Components: somethingComponent.js.
 - Helpers: somethingHelpers.js.
 
-**🎨 Style & Formatting**
+
+## 🚀 TSI Project Style Guide
+
+This guide defines how to name, structure, and organize code in the TSI project. Follow it strictly to keep the codebase clean, consistent, and future-proof.
+
+1. **🎨 Style & Formatting**
 
 - Indentation: 2 spaces.
 - Semicolons: required.
 - Braces: always use { }, even for single-line blocks.
-- **Variables:**
-- const by default, let only if reassigned.
-- No var.
-- **Naming:**
-- camelCase for variables & functions.
-- PascalCase for classes.
-- SCREAMING_SNAKE_CASE for constants.
+- const by default, let only if reassigned. No var.
 
-**🛠️ Best Practices**
-
-- Keep systems small and focused — one responsibility each.
-- Avoid duplicate logic → factor into helpers if reused.
-- Use smooth transitions (lerp, damping) for camera, movement, aiming.
-- Always ensure frame-rate independence (time delta aware).
-- Keep UI responsive to game state changes (sync highlighting, buttons, etc.).
-
-
-# 🚀 TSI Project Style Guide
-
-This guide defines how to name, structure, and organize code in the TSI project. Follow it strictly to keep the codebase clean, consistent, and future-proof.
-
-1. **Functions & Variables**
+2. **Functions & Variables**
 
 - camelCase for all functions and variables.
 ✅ spawnTank(), applyStyleScheme(), getCameraState()
@@ -120,18 +109,18 @@ Example: PIN_R, TILE_SIZE, MAX_SPEED
 2. **Classes**
 
 - PascalCase for classes and constructors.
-✅ Tank, CameraHUD, EventBus
-❌ tank, camera_hud, eventbus
+- ✅ Tank, CameraHUD, EventBus
+- ❌ tank, camera_hud, eventbus
 
 - Class names should be nouns describing the entity.
-Example: Tank, Skybox, GameSession
+- Example: Tank, Skybox, GameSession
 
 3. **Files**
 
 - camelCase for file names.
 - Example:
-✅ cameraHud.js, spawnTank.js, debugSnapshotSystem.js
-❌ Camera_HUD.js, spawn_tank.js
+- ✅ cameraHud.js, spawnTank.js, debugSnapshotSystem.js
+- ❌ Camera_HUD.js, spawn_tank.js
 - One module per file (except for small utilities).
 - Folder prefixes for clarity (in trees/lists):
 
@@ -141,15 +130,15 @@ Example: Tank, Skybox, GameSession
 - Components are tiny, data-only objects.
 - No methods, only fields.
 - Example:
-const Transform = {
+`const Transform = {
   position: { x: 0, y: 0, z: 0 },
   rotation: { yaw: 0, pitch: 0, roll: 0 }
-};
+};`
 
 5. **Systems**
 
 - Standardized signature: 
-- function someSystem(dt, world, registry) { ... }
+`function someSystem(dt, world, registry) { ... }`
 - All new systems must include at least one logging line for debugging.
 
 6. **HUD & UI**
