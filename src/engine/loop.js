@@ -11,7 +11,9 @@ export function createLoop(renderer, scene, camera, registry) {
   }
 
   function step(dt, world) {
-    for (const sys of systems) sys(dt, world, registry);
+    const s = (world && typeof world.timeScale === 'number') ? world.timeScale : 1.0;
+    const sdt = dt * s;
+    for (const sys of systems) sys(sdt, world, registry);
     if (renderer && scene && camera) renderer.render(scene, camera);
   }
 

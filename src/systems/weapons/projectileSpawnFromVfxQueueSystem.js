@@ -15,8 +15,10 @@ export function projectileSpawnFromVfxQueueSystem(dt, world, registry) {
     const forward = it.forward || { x:0,y:0,z:1 };
     const pos = it.worldPos || { x:0,y:0,z:0 };
 
-    if (isCannon) spawnShell(registry, scene, pos, forward);
-    else spawnBullet(registry, scene, pos, forward);
+    const ent = isCannon ? spawnShell(registry, scene, pos, forward) : spawnBullet(registry, scene, pos, forward);
+    if (world.cameraMode === "follow_gun_projectile") {
+      world.followProjectileTargetId = ent?.id;
+    }
 
     Logger.info("[projectileSpawnFromVfxQueue] spawned", { cannon: !!isCannon });
   }
