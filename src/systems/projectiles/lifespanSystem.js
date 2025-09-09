@@ -8,11 +8,12 @@ export function lifespanSystem(dt, world, registry) {
       const pos = t?.position || {x:0,y:0,z:0};
       const d = e.components.Direction || { x:0,y:0,z:1 };
       const kind = e.components.Projectile?.kind || "bullet";
-
-      // Queue big/visible VFX
       world.vfxQueue = world.vfxQueue || [];
+
       if (kind === "shell") {
         world.vfxQueue.push({ preset: "SHELL_EXPLOSION_LARGE", worldPos: { x:pos.x, y:pos.y, z:pos.z }, forward: { x:d.x, y:d.y, z:d.z } });
+        // camera shake
+        world.cameraShake = { time: 0.35, duration: 0.35, magnitude: 0.25 };
       } else {
         if (Math.random() < 0.5) {
           world.vfxQueue.push({ preset: "BULLET_SPARK_STORM", worldPos: { x:pos.x, y:pos.y, z:pos.z }, forward: { x:d.x, y:d.y, z:d.z } });
@@ -22,7 +23,6 @@ export function lifespanSystem(dt, world, registry) {
         }
       }
 
-      // Remove entity
       if (e.object3D && e.object3D.parent) e.object3D.parent.remove(e.object3D);
       registry.remove(e.id);
     }

@@ -26,6 +26,7 @@ import { projectileSpawnFromVfxQueueSystem } from "../systems/weapons/projectile
 import { projectileFlightSystem } from "../systems/projectiles/projectileFlightSystem.js";
 import { lifespanSystem } from "../systems/projectiles/lifespanSystem.js";
 import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js";
+import { cameraShakeSystem } from "../systems/camera/cameraShakeSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
@@ -74,5 +75,6 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);
   loop.addSystem(cameraFollowGunSystem);
+  loop.addSystem(cameraShakeSystem);
   loop.addSystem(arrowGizmoSystem);
 }

@@ -24,7 +24,7 @@ function spawnProjectile(registry, scene, position, forward, opts) {
   const eid = registry.nextId();
   const group = new THREE.Group();
 
-  // Visible core (distinct sizes/colors)
+  // Core visuals
   const core = new THREE.Mesh(
     new THREE.SphereGeometry(opts.coreRadius, 12, 8),
     new THREE.MeshBasicMaterial({ color: opts.coreColor })
@@ -39,10 +39,14 @@ function spawnProjectile(registry, scene, position, forward, opts) {
       Transform: createTransform(position.x, position.y, position.z, 0, 0, 0),
       Direction: createDirection(forward.x, forward.y, forward.z),
       Projectile: createProjectile({ kind: opts.kind, speed: opts.speed }),
-      Lifespan: createLifespan(5000),
+      Lifespan: createLifespan(2000), // 2s
       Tracer: createTracer(opts.tracer),
     },
   };
+  // store initial velocity for shell physics; bullets will compute on first tick too
+  const m = Math.hypot(forward.x, forward.y, forward.z) || 1;
+  ent._vel = { x: (forward.x/m)*opts.speed, y: (forward.y/m)*opts.speed, z: (forward.z/m)*opts.speed };
+
   registry.add(ent);
   if (scene) scene.add(group);
   return ent;
