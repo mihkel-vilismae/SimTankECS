@@ -1,0 +1,1 @@
+export function createDirection(x=0,y=0,z=1) { return { x,y,z }; }

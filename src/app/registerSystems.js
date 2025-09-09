@@ -21,6 +21,12 @@ import { vfxSpawnSystem } from "../systems/vfx/vfxSpawnSystem.js";
 import { vfxUpdateSystem } from "../systems/vfx/vfxUpdateSystem.js";
 import { weaponRecoilSystem } from "../systems/weapons/weaponRecoilSystem.js";
 
+// NEW projectile systems
+import { projectileSpawnFromVfxQueueSystem } from "../systems/weapons/projectileSpawnFromVfxQueueSystem.js";
+import { projectileFlightSystem } from "../systems/projectiles/projectileFlightSystem.js";
+import { lifespanSystem } from "../systems/projectiles/lifespanSystem.js";
+import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js";
+
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
@@ -29,29 +35,43 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
 
-  loop.addSystem(weaponSelectionSystem); // cycle weapons
-  loop.addSystem(weaponRecoilSystem);  // weapon recoil - Order: after movement, before transform
+  loop.addSystem(weaponSelectionSystem);      // cycle weapons
+  loop.addSystem(weaponRecoilSystem);         // weapon recoil
 
   // Aiming & mounting happen before we mirror Transforms to object3D
   loop.addSystem(mouseRaycastSystem);
-  // UI crosshair follows raycast hit
-  loop.addSystem(crosshairSystem);
+  loop.addSystem(crosshairSystem);            // UI crosshair follows raycast hit
   loop.addSystem(turretAimingSystem);
   loop.addSystem(weaponElevationSystem);
   loop.addSystem(hardpointMountSystem);
+
   // Fire input (ammo/cooldowns)
   loop.addSystem(weaponInputSystem);
-  // Convert FireEvent -> VFX spawn queue
+
+  // Convert FireEvent -> VFX queue
   loop.addSystem(weaponFireEventSystem);
+
+  // Spawn projectiles from fire events
+  loop.addSystem(projectileSpawnFromVfxQueueSystem);
+  // Update projectile flight + lifespans
+  loop.addSystem(projectileFlightSystem);
+  loop.addSystem(lifespanSystem);
+
   // Spawn then update VFX
   loop.addSystem(vfxSpawnSystem);
   loop.addSystem(vfxUpdateSystem);
+
+  // Render tracers (after VFX updates, before transforms applied)
+  loop.addSystem(tracerRenderSystem);
+
   // Apply transforms to meshes last
   loop.addSystem(transformApplySystem);
+
+  // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
   const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
-  loop.addSystem(orbitSystem);         // camera LOOK mode
-  loop.addSystem(lookAtMouseSystem);          // face mouse ground
+  loop.addSystem(orbitSystem);
+  loop.addSystem(lookAtMouseSystem);
   loop.addSystem(cameraFollowSystem);
   loop.addSystem(cameraFollowGunSystem);
   loop.addSystem(arrowGizmoSystem);
