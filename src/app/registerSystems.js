@@ -35,8 +35,8 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
 
-  loop.addSystem(weaponSelectionSystem);      // cycle weapons
-  loop.addSystem(weaponRecoilSystem);         // weapon recoil
+  loop.addSystem(weaponSelectionSystem); // cycle weapons
+  loop.addSystem(weaponRecoilSystem);  // weapon recoil - Order: after movement, before transform
 
   // Aiming & mounting happen before we mirror Transforms to object3D
   loop.addSystem(mouseRaycastSystem);
@@ -56,7 +56,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   // Update projectile flight + lifespans
   loop.addSystem(projectileFlightSystem);
   loop.addSystem(lifespanSystem);
-
+  // --- end Projectiles ---
   // Spawn then update VFX
   loop.addSystem(vfxSpawnSystem);
   loop.addSystem(vfxUpdateSystem);
@@ -70,8 +70,6 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
   const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
-  loop.addSystem(orbitSystem);
-  loop.addSystem(lookAtMouseSystem);
   loop.addSystem(cameraFollowSystem);
   loop.addSystem(cameraFollowGunSystem);
   loop.addSystem(arrowGizmoSystem);
