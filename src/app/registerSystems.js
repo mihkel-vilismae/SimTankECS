@@ -70,6 +70,8 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
   const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
+  loop.addSystem(orbitSystem);         // camera LOOK mode
+  loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);
   loop.addSystem(cameraFollowGunSystem);
   loop.addSystem(arrowGizmoSystem);
