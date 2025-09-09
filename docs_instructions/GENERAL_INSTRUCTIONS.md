@@ -1,0 +1,4 @@
+- DO NOT MODIFY THE  STYLE_GUIDE_INSTRUCTIONS.md file (keep it verbatim),
+- if i want to add a new command for AI, then append it to the file COMMANDS.md 
+- if i tell you to change/add automatic actions after every prompt, then modify the AUTO_ACTIONS.md file
+- 
