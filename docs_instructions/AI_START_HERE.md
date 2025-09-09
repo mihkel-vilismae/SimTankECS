@@ -1,5 +1,9 @@
 # AI_START_HERE.md
 
+_Version: v1.1 – 2025-09-09 19:30:46_
+
+
+
 > Read this file first after a project ZIP is uploaded. Then follow the steps and rules below exactly.
 
 ## 0) Project bootstrap (run in this order)

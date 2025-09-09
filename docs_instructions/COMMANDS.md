@@ -1,5 +1,10 @@
 # Instruction for future chats:
 
+_Version: v1.1 – 2025-09-09 19:30:46_
+
+
+
+
 **1. Command:**
 
 `print folder list` / `print folder tree`
@@ -84,4 +89,3 @@ Example output format:
 │   ├── components
 │   │   ├── arrowGizmo.js (LOC=9, created=2025-09-06 15:18:50, modified=2025-09-06 15:18:50)
 │   │   ├── flight.js (LOC=4, created=2025-09-06 15:18:50, modified=2025-09-06 15:18:50)
-

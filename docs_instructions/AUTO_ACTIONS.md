@@ -1,5 +1,10 @@
 # AUTO_ACTIONS.md
 
+_Version: v1.1 – 2025-09-09 19:30:46_
+
+
+
+
 ## Auto Actions (always active)
 
 - **On new project ZIP upload**:

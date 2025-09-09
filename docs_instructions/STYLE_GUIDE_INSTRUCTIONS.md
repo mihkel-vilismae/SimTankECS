@@ -1,3 +1,6 @@
+_Version: v1.1 – 2025-09-09 19:30:46_
+
+
 
 # General Development Instructions
 #### - Always think like a senior developer.

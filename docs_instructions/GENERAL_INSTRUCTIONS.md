@@ -1,3 +1,6 @@
+_Version: v1.1 – 2025-09-09 19:30:46_
+
+
 - DO NOT MODIFY THE  STYLE_GUIDE_INSTRUCTIONS.md file (keep it verbatim),
 - if i want to add a new command for AI, then append it to the file COMMANDS.md 
 - if i tell you to change/add automatic actions after every prompt, then modify the AUTO_ACTIONS.md file
@@ -23,3 +26,8 @@
    [prompt at: YYYY-MM-DD HH:MM:SS Europe/Tartu]
    [response at: YYYY-MM-DD HH:MM:SS Europe/Tartu]
    ```
+
+
+## Changelog
+
+- 2025-09-09 – v1.1: Added version markers to all instruction files; created Smoke Test Checklist.- 2025-09-09 19:30:46 – v1.1: Added time to version markers in all instruction files; created standalone CHANGELOG.md.
