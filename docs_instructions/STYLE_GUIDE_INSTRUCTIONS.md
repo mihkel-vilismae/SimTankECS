@@ -10,20 +10,18 @@ _Version: v1.3 – 2025-09-09 22:45:44 EEST_
 #### - If the user doesn’t give specific file-related orders, prefer modifying existing files instead of creating new ones.
 #### - Always ask for clarification if the user’s request is ambiguous or incomplete.
 
-~~Logging rules (simtank_log.txt, prompt_log_v2.txt) are completely removed — do not reintroduce them.~~
-~~No “File Handling Rules” active anymore.~~
+
 
 ## Project-Specific Instructions
 🚜 **Tank + Movement**
 
 - The hull of every object must always face the movement direction (same as the arrow drawn on the ground).
 - The arrow drawn on the ground should be its own system, applied to every currently selected object.
-
-~~- When a vehicle (e.g., tank) is created, it must have:~~
-~~- movementInputSystem → handles WSAD input.~~
-~~- movementTransformationSystem → applies movement in the world.~~
-~~- movementVFXSystem → triggers visuals like track turning and exhaust smoke.~~
-
+- When a vehicle (e.g., tank) is created, it must use existing systems (or propose new ones):
+- movement related system(s) → handles WSAD input, and Q/E in case of flying vehicles. (later also virtual joystick input for mobile, and custom like ESP32 sensor based controller) 
+- movement transformation system → applies movement in the world.
+- movement VFX system → triggers visuals like track turning and exhaust smoke.
+- 
 **🎯 Turret + Weapons**
 
 - Turret rotates with the mouse.
@@ -47,8 +45,7 @@ Existing camera modes remain (e.g., follow hull).
 - Keeps active-state highlighting in sync.
 - System Wiring (src/app/registerSystems.js):
 - Imports and adds cameraFollowGunSystem (after cameraFollowSystem).
-~~###### Keybinding (src/app/createGame.js):~~
-~~- Digit5 → switches to "follow_gun" mode.~~
+
 
 ## Code Style Instructions
 **📦 Project Structure**
