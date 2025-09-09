@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { createTank } from "../tankFactory.js";
+import { createTank } from "../src/entities/tankFactory.js";
 
 function makeReg() {
-  const { createRegistry } = require("../../engine/registry.js");
+  const { createRegistry } = require("../src/engine/registry.js");
   return createRegistry();
 }
 

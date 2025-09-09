@@ -35,7 +35,9 @@ class WebGLRenderer{
   constructor(){ this._dom = { nodeType: 1 }; }
   setPixelRatio(){} setSize(){} get domElement(){ return this._dom; }
   render(){}
-  get shadowMap(){ return { enabled: false, set enabled(v){} }; }
+  get shadowMap() {
+    return { set enabled(v) {} };
+  }
 }
 class PerspectiveCamera{
   constructor(){ this.position = new Vector3(); this.aspect=1; }
@@ -104,6 +106,7 @@ vi.mock("three", () => {
     AmbientLight,
     DirectionalLight,
     CylinderGeometry,
-    Group
+    Group,
+    Object3D: Group
   };
 });
