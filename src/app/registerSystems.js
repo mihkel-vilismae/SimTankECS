@@ -32,6 +32,7 @@ import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js
 import { colliderDebugSystem } from "../systems/debug/colliderDebugSystem.js";
 import { autoColliderAttachSystem } from "../systems/physics/autoColliderAttachSystem.js";
 import { projectileCollisionSystem } from "../systems/projectiles/projectileCollisionSystem.js";
+import vehicleBuildingCollisionSystem from "../systems/physics/vehicleBuildingCollisionSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
@@ -78,6 +79,11 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   // Apply transforms to meshes last
   loop.addSystem(transformApplySystem);
   loop.addSystem(colliderDebugSystem);
+
+  // After integrating motion updates:
+  loop.addSystem(projectileCollisionSystem);
+  loop.addSystem(vehicleBuildingCollisionSystem);
+
 
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
