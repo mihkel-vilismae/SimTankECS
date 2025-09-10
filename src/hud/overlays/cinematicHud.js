@@ -1,4 +1,5 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot, createButton } from "../core/hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
+import {createButton} from "../elements/createButton.js";
 
 export function createCinematicHUD({ getWorld } = {}) {
   const panel = createPanel({ id: "hud-cinematic", title: "Explosion Cinematic" });

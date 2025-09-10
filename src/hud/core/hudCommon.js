@@ -51,18 +51,6 @@ export function destroyPanel(panel) {
   }
 }
 
-export function createButton(label, onClick) {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.textContent = label;
-  btn.className = "hud-btn";
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    onClick?.();
-  });
-  return btn;
-}
-
 /** Render key–value rows inside a panel body */
 export function renderKV(body, rows) {
   body.innerHTML = "";
@@ -88,9 +76,3 @@ export function setActive(el, isActive) {
   el.classList.toggle("active", !!isActive);
 }
 
-/** Create a selectable button with 'active' highlight */
-export function createSelectableButton(label, { onClick, active = false } = {}) {
-  const btn = createButton(label, onClick);
-  if (active) btn.classList.add("active");
-  return btn;
-}

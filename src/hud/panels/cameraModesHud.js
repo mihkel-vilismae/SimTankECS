@@ -1,4 +1,5 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot, createSelectableButton, setActive } from "../core/hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot, setActive } from "../core/hudCommon.js";
+import {createSelectableButton} from "../elements/createButton.js";
 
 /**
  * CameraModesHUD
