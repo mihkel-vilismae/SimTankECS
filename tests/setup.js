@@ -51,6 +51,10 @@ const BackSide = "BackSide";
 class BoxGeometry{ constructor(){} }
 class AmbientLight{ constructor(){}}
 class CylinderGeometry{ constructor(){}}
+class DataTexture{ constructor(){} }
+class RGBAFormat{ constructor(){}}
+class RepeatWrapping{ constructor(){}}
+class GridHelper{ constructor(){}}
 class Group{ constructor(){ this.children=[]; this.position=new Vector3(); this.rotation={x:0,y:0,z:0}; }
   add(o){ this.children.push(o); }
   remove(o){ const i=this.children.indexOf(o); if(i>=0) this.children.splice(i,1); }
@@ -107,6 +111,10 @@ vi.mock("three", () => {
     DirectionalLight,
     CylinderGeometry,
     Group,
-    Object3D: Group
+    Object3D: Group,
+    DataTexture,
+    RGBAFormat,
+    RepeatWrapping,
+    GridHelper
   };
 });
