@@ -44,7 +44,7 @@ export function arrowGizmoSystemFactory(scene) {
     // cleanup
     for (const [id, helper] of helpers) {
       const ent = registry.getById?.(id);
-     // const has = !!ent && !!registry.getComponent(ent, "Transform") && !!registry.getComponent(ent, "ArrowGizmo");
+      // const has = !!ent && !!registry.getComponent(ent, "Transform") && !!registry.getComponent(ent, "ArrowGizmo");
       const has = !!ent && typeof registry.getComponent === "function"
           && !!registry.getComponent(ent, "Transform")
           && !!registry.getComponent(ent, "ArrowGizmo");
