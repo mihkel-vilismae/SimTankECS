@@ -13,9 +13,8 @@ import { createLoop } from "../engine/loop.js";
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
-import { createFollowProjectileModeHUD } from "../hud/followProjectileModeHud.js";
-import { createCinematicHUD } from "../hud/cinematicHud.js";
-import { createKeyOverlayHUD } from "../hud/keyOverlayHud.js";
+import { createHealthBarsHUD } from "../hud/healthBarsHud.js";
+import { createCityGeneratorHUD } from "../hud/cityGeneratorHud.js";
 import { attachInput } from "./attachInput.js";
 import { attachMouse } from "./attachMouse.js";
 import { createHud } from "../hud/createHud.js";
@@ -96,12 +95,11 @@ export function createGame(canvas = document.getElementById("app")) {
   // Camera modes HUD (always shown)
   const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
   cameraHud.mount();
-  const followProjHud = createFollowProjectileModeHUD({ getWorld: () => loop.world });
-  followProjHud.mount();
-  const cinematicHud = createCinematicHUD({ getWorld: () => loop.world });
-  cinematicHud.mount();
-  const keyHud = createKeyOverlayHUD({ getWorld: () => loop.world });
-  keyHud.mount();
+  const hpHud = createHealthBarsHUD({ getWorld: () => loop.world, getRegistry: () => registry });
+  hpHud.mount();
+  const cityHud = createCityGeneratorHUD({ getWorld: () => loop.world, getRegistry: () => registry });
+  cityHud.mount();
+
   window.addEventListener("keydown", (e) => {
     const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit", Digit5: "follow_gun" };
     const m = map[e.code];
