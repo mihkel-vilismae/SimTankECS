@@ -81,7 +81,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
 
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
-  const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
+  const orbitSystem = createOrbitControlsSystem(camera, (renderer && renderer.domElement) ? renderer.domElement : { addEventListener(){}, removeEventListener(){} });
   loop.addSystem(orbitSystem);         // camera LOOK mode
   loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);

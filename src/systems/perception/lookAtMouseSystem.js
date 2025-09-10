@@ -2,15 +2,16 @@ import { normalizeAngle } from "../../utils/math3d.js";
 import { Logger } from "../../utils/logger.js";
 
 export function lookAtMouseSystem(dt, world, registry) {
+  const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
   if (!world.mouse?.worldPoint) return;
   const targetId = world.control?.entityId;
   if (!targetId) return;
 
   const e = registry.getById?.(targetId);
-  if (!e || !registry.getComponent(e, "Transform") || !registry.getComponent(e, "MouseFollower")) return;
+  if (!e || !getC(e, "Transform") || !getC(e, "MouseFollower")) return;
 
-  const t = registry.getComponent(e, "Transform");
-  const m = registry.getComponent(e, "MouseFollower");
+  const t = getC(e, "Transform");
+  const m = getC(e, "MouseFollower");
   const p = world.mouse.worldPoint;
   const dx = p.x - t.position.x;
   const dz = p.z - t.position.z;
