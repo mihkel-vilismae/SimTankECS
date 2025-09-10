@@ -22,6 +22,7 @@ export function projectileCollisionSystem(dt, world, registry){
   for (const e of ents) {
     const t = registry.getComponent(e, "Transform");
     const p = registry.getComponent(e, "Projectile");
+    const projRadius = (p && p.radius != null) ? p.radius : (p?.kind === 'shell' ? 0.15 : 0.05);
     if (!t || !p) continue;
 
     // previous position fallback
@@ -56,7 +57,7 @@ export function projectileCollisionSystem(dt, world, registry){
           y: col.t.position.y + col.c.center.y,
           z: col.t.position.z + col.c.center.z
         };
-        const tHit = segmentAabbHit(prev, curr, center, col.c.half);
+        const tHit = segmentAabbHit(prev, curr, center, col.c.half, projRadius);
         if (tHit != null && tHit < bestT) {
           bestT = tHit; best = col;
         }
@@ -83,7 +84,7 @@ export function projectileCollisionSystem(dt, world, registry){
       const forward = p.forward || { x: 0, y: 0, z: 1 };
       if (hitEntityId != null) {
         // apply damage based on projectile kind
-        const dmg = (p.kind === "shell") ? 60 : 12;
+        let dmg = (p.kind === "shell") ? 85 : 15;
         world.damageQueue.push({ entityId: hitEntityId, amount: dmg });
         world.vfxQueue.push({ preset: "BULLET_SPARK_STORM", worldPos: hitPoint, forward });
       } else {

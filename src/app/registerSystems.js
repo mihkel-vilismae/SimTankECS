@@ -29,6 +29,7 @@ import { projectileSpawnFromVfxQueueSystem } from "../systems/weapons/projectile
 import { projectileFlightSystem } from "../systems/projectiles/projectileFlightSystem.js";
 import { lifespanSystem } from "../systems/projectiles/lifespanSystem.js";
 import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js";
+import { colliderDebugSystem } from "../systems/debug/colliderDebugSystem.js";
 import { autoColliderAttachSystem } from "../systems/physics/autoColliderAttachSystem.js";
 import { projectileCollisionSystem } from "../systems/projectiles/projectileCollisionSystem.js";
 
@@ -76,6 +77,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
 
   // Apply transforms to meshes last
   loop.addSystem(transformApplySystem);
+  loop.addSystem(colliderDebugSystem);
 
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);

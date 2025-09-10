@@ -28,5 +28,12 @@ export const VFX_PRESETS = {
     smoke: { count: 14, size: [0.25, 0.55], life: [0.9, 1.6], drift: [0.4,0.9], upward: 0.7 },
     sparks:{ count: 220, speed: [6,13], life: [1.2,2.0], gravity: -11, spread: 1.2 },
     shock: { enabled: false }
+  },
+  BUILDING_COLLAPSE: {
+    flash: { sprites: 2, color: 0xfff2c0, size: [0.8, 1.4], life: 0.08 },
+    light: { intensity: 2.0, radius: 6.0, decay: 2.5, life: 0.12 },
+    smoke: { count: 18, size: [1.2, 2.6], life: [1.8, 3.0], drift: [0.4, 1.2], upward: 0.7, opacity: 0.35 },
+    sparks: { count: 20, speed: [2.0, 5.0], life: [0.6, 0.9], spread: 0.6, gravity: -9.8 },
+    shock: { enabled: true, radius: 3.2, life: 0.1 }
   }
 };

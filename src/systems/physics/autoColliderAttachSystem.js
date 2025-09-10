@@ -13,7 +13,9 @@ export function autoColliderAttachSystem(dt, world, registry){
     if (!obj) continue;
     try {
       const aabb = computeObjectAABB(obj);
-      registry.addComponent(e, "Collider", Collider({ center: aabb.center, half: expandHalf(aabb.half, 0.2) }));
+      const t = registry.getComponent(e, "Transform");
+      const localCenter = t ? { x: aabb.center.x - t.position.x, y: aabb.center.y - t.position.y, z: aabb.center.z - t.position.z } : aabb.center;
+      registry.addComponent(e, "Collider", Collider({ center: localCenter, half: expandHalf(aabb.half, 0.2) }));
     } catch {}
   }
   world._autoCollidersOnce = true;

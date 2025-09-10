@@ -1,7 +1,7 @@
 // Segment (p0->p1) vs Axis-Aligned Box (center, half extents). Returns t[0..1] or null.
-export function segmentAabbHit(p0, p1, center, half){
+export function segmentAabbHit(p0, p1, center, half, radius=0){
   // Convert to box space where box centered at origin
-  const r = { x: half.x, y: half.y, z: half.z };
+  const r = { x: half.x + radius, y: half.y + radius, z: half.z + radius };
   const s = { x: p0.x - center.x, y: p0.y - center.y, z: p0.z - center.z };
   const e = { x: p1.x - center.x, y: p1.y - center.y, z: p1.z - center.z };
   const d = { x: e.x - s.x, y: e.y - s.y, z: e.z - s.z };
