@@ -1,46 +1,59 @@
 
-import * as THREE from 'three';
-import createGL from 'gl';
-import { createCanvas } from '@napi-rs/canvas';
+// Headless WebGL setup for Vitest (Node)
+// - Provides window/document via jsdom
+// - Hooks canvas.getContext(...) to return a headless-gl WebGL context
+import { JSDOM } from "jsdom";
+let glFactory: any;
 
-(globalThis as any).requestAnimationFrame ??= (cb: FrameRequestCallback) => setTimeout(() => cb(Date.now()), 16);
-(globalThis as any).cancelAnimationFrame ??= (id: number) => clearTimeout(id as any);
-(globalThis as any).devicePixelRatio ??= 1;
+(async () => {
+  try {
+    console.error("[setupHeadlessWebGL] is used!");
+    glFactory = (await import("gl")).default ?? await import("gl");
+  } catch (e) {
+    console.warn("[setupHeadlessWebGL] 'gl' package not installed. WebGL will be mocked.");
+  }
+})();
 
-function makeCanvas(width = 800, height = 600) {
-  const canvas: any = createCanvas(width, height);
-  canvas.width = width; canvas.height = height;
-  canvas.getContext = (type: string, attrs?: any) => {
-    if (type === '2d') {
-      return {
-        createImageData: (w: number, h: number) => ({ data: new Uint8ClampedArray(w*h*4), width: w, height: h }),
-        putImageData: () => {},
-      } as any;
-    }
-    if (type === 'webgl' || type === 'webgl2') {
-      const gl: any = createGL(width, height, { preserveDrawingBuffer: true, ...attrs });
-      gl.canvas = canvas;
+const { window } = new JSDOM(`<!doctype html><html><body><div id="app"></div></body></html>`, {
+  pretendToBeVisual: true,
+});
+const { document } = window as unknown as { document: Document };
+
+(globalThis as any).window = window;
+(globalThis as any).document = document;
+(globalThis as any).performance = globalThis.performance ?? { now: () => Date.now() };
+(globalThis as any).requestAnimationFrame = (cb: Function) => setTimeout(() => cb(Date.now()), 16);
+(globalThis as any).cancelAnimationFrame = (id: number) => clearTimeout(id);
+(globalThis as any).navigator = { userAgent: "vitest-jsdom" };
+
+class OffscreenCanvasShim {
+  width: number;
+  height: number;
+  constructor(width = 800, height = 600) { this.width = width; this.height = height; }
+  getContext(kind: string, attrs?: any) {
+    if (glFactory && (kind === "webgl" || kind === "webgl2" || kind === "experimental-webgl")) {
+      const gl = glFactory(this.width, this.height, { antialias: true, ...attrs });
       return gl;
     }
-    return null;
+    return { canvas: this, getParameter(){return 0;}, getExtension(){return null;}, viewport(){}, clearColor(){}, clear(){}, enable(){}, disable(){}, createShader(){return {};}, shaderSource(){}, compileShader(){}, createProgram(){return {};}, attachShader(){}, linkProgram(){}, useProgram(){}, getError(){return 0;} };
+  }
+}
+(globalThis as any).OffscreenCanvas = OffscreenCanvasShim as any;
+
+const HTMLCanvasElementProto: any = (window as any).HTMLCanvasElement?.prototype;
+if (HTMLCanvasElementProto) {
+  const origGetContext = HTMLCanvasElementProto.getContext;
+  HTMLCanvasElementProto.getContext = function(kind: string, attrs?: any) {
+    if (glFactory && (kind === "webgl" || kind === "webgl2" || kind === "experimental-webgl")) {
+      const width = this.width || 800;
+      const height = this.height || 600;
+      const gl = glFactory(width, height, { antialias: true, ...attrs });
+      return gl;
+    }
+    return origGetContext ? origGetContext.call(this, kind, attrs) : null;
   };
-  return canvas;
 }
 
-const origCreateEl = globalThis.document?.createElement?.bind(document);
-if (origCreateEl) {
-  (document as any).createElement = (tag: string, ...rest: any[]) => {
-    if (tag.toLowerCase() === 'canvas') return makeCanvas();
-    return origCreateEl(tag, ...rest);
-  };
-}
+(window as any).matchMedia = (query: string) => ({ matches: false, media: query, addEventListener: () => {}, removeEventListener: () => {} });
 
-(globalThis as any).OffscreenCanvas ??= class {
-  private _canvas = makeCanvas();
-  width: number; height: number;
-  constructor(w = 1, h = 1) { this.width = w; this.height = h; }
-  getContext(type: string, attrs?: any) { return (this._canvas as any).getContext(type, attrs); }
-  transferToImageBitmap() { return {}; }
-};
-
-(globalThis as any).createImageBitmap ??= async () => ({});
+console.info("[setupHeadlessWebGL] Installed headless WebGL hooks.");

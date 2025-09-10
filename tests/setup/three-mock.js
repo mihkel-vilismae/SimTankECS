@@ -6,6 +6,7 @@
 import { vi } from 'vitest';
 
 vi.mock('three', async (importOriginal) => {
+    console.error("[three-mock] is used!");
     const actual = await importOriginal();
 
     // --- Minimal shims if certain classes/constants are missing in the test env ---

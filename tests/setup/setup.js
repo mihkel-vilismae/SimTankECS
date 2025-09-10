@@ -89,6 +89,7 @@ class Raycaster {
   }
 }
 
+/*
 vi.mock("three", () => {
   return {
     default: {},
@@ -118,3 +119,4 @@ vi.mock("three", () => {
     GridHelper
   };
 });
+*/
