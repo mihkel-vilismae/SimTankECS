@@ -16,6 +16,8 @@ export function cameraExplosionCinematicSystem(dt, world, registry) {
   c.t += dt;
 
   if (c.phase === "orbit") {
+    // Snap immediately if requested by hotkey
+    if (world.cinematicSnapRequest) { c.t = c.duration; }
     // Apply time slow during orbit
     world.timeScale = 0.6;
     const a = c.t * c.angVel;
@@ -32,7 +34,8 @@ export function cameraExplosionCinematicSystem(dt, world, registry) {
     cam.lookAt(c.center.x, c.center.y, c.center.z);
 
     if (c.t >= c.duration) {
-      const snap = !!world.cinematicSnapBack;
+      const snap = !!world.cinematicSnapBack || !!world.cinematicSnapRequest;
+      world.cinematicSnapRequest = false;
       if (snap) {
         // compute follow_gun target and snap immediately
         const guns = registry.query(["Gun", "Transform"]);

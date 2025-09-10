@@ -13,6 +13,7 @@ import { createLoop } from "../engine/loop.js";
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
+import { createKeyOverlayHUD } from "../hud/keyOverlayHud.js";
 import { createCinematicHUD } from "../hud/cinematicHud.js";
 import { createFollowProjectileModeHUD } from "../hud/followProjectileModeHud.js";
 import { attachInput } from "./attachInput.js";
@@ -95,11 +96,19 @@ export function createGame(canvas = document.getElementById("app")) {
   // Camera modes HUD (always shown)
   const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
   cameraHud.mount();
+  const keyHud = createKeyOverlayHUD({ getWorld: () => loop.world });
+  keyHud.mount();
   const cinematicHud = createCinematicHUD({ getWorld: () => loop.world });
   cinematicHud.mount();
   const followProjHud = createFollowProjectileModeHUD({ onToggle: () => { loop.world.cameraMode = "follow_gun_projectile"; } });
   followProjHud.mount();
   window.addEventListener("keydown", (e) => {
+    if (e.code === "KeyS") {
+      const w = loop.world;
+      if (w && w.cinematicExplosion && w.cinematicExplosion.active) {
+        w.cinematicSnapRequest = true;
+      }
+    }
     const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit", Digit5: "follow_gun", Digit6: "follow_gun_projectile" };
     const m = map[e.code];
     if (m) { loop.world.cameraMode = m; cameraHud.update({ mode: m }); }
