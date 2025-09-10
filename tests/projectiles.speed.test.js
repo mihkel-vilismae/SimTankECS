@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createProjectile } from './components/projectile.js';
+import { createProjectile } from '../src/components/projectile.js';
 
 describe('Projectile speeds', () => {
   it('bullet default speed is slower (300)', () => {

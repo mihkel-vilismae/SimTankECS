@@ -1,5 +1,5 @@
 import { lerp } from "../../utils/math3d.js";
-import { muzzleForward } from "../../aim/math.js";
+import { muzzleForward } from "../../utils/math.js";
 import { Logger } from "../../utils/logger.js";
 
 /**

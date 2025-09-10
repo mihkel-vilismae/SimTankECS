@@ -1,5 +1,5 @@
 import { Logger } from "../../utils/logger.js";
-import { muzzleForward, rotateXZByYaw } from "../../aim/math.js";
+import { muzzleForward, rotateXZByYaw } from "../../utils/math.js";
 
 /**
  * Applies parent Hardpoint slot transform to children with Mount, writing to child Transform.

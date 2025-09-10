@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { projectileFlightSystem } from './systems/projectiles/projectileFlightSystem.js';
+import { projectileFlightSystem } from '../src/systems/projectiles/projectileFlightSystem.js';
 
 function makeRegistry(){
   let next=1; const ents=new Map();
