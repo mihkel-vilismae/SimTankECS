@@ -7,8 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "coverage": "vitest run --coverage",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:all": "vitest",
+    "test:unit": "vitest -p unit",
+    "test:integration": "vitest -p integration"
   },
   "dependencies": {
     "three": "^0.179.1"

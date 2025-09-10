@@ -4,7 +4,7 @@
 if (typeof HTMLCanvasElement !== 'undefined') {
   const proto = HTMLCanvasElement.prototype;
   if (typeof proto.getContext !== 'function') {
-    proto.getContext = function (type) {
+    proto.getContext = function(type) {
       if (type === 'webgl' || type === 'webgl2') {
         return {
           getExtension: () => null,
@@ -35,9 +35,7 @@ if (typeof HTMLCanvasElement !== 'undefined') {
 if (typeof document !== 'undefined') {
   if (!document.getElementById) {
     document.getElementById = () => {
-      const c = document.createElement
-          ? document.createElement('canvas')
-          : { width: 1, height: 1 };
+      const c = document.createElement ? document.createElement('canvas') : { width: 1, height: 1 };
       return c;
     };
   }
@@ -50,6 +48,5 @@ if (typeof document !== 'undefined') {
 
 // Stub requestAnimationFrame for systems relying on it
 if (typeof globalThis.requestAnimationFrame !== 'function') {
-  globalThis.requestAnimationFrame = (cb) =>
-      setTimeout(() => cb(Date.now()), 16);
+  globalThis.requestAnimationFrame = (cb) => setTimeout(() => cb(Date.now()), 16);
 }
