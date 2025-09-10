@@ -1,6 +1,8 @@
 import { createCityClassifier } from "./cityPlanner.js";
 import * as THREE from "three";
 import { Building } from "../../components/building.js";
+import { Collider } from "../../components/collider.js";
+import { computeObjectAABB, expandHalf } from "../../utils/aabb.js";
 function rand(a,b){ return a + Math.random()*(b-a); }
 function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const COLORS=[0x9aa4ad,0xbfc7cf,0x8f9aa6,0xcccccc,0xdedede,0xa79f8e,0x6f7c85];
@@ -17,7 +19,7 @@ export function buildingSpawnSystem(dt, world, registry){
     const s=1.5;
     for(let fx=0;fx<baseW;fx++){ for(let fz=0;fz<baseD;fz++){ for(let fy=0;fy<floors;fy++){ const geom=new THREE.BoxGeometry(s,s,s); const mesh=new THREE.Mesh(geom,mat); mesh.castShadow=mesh.receiveShadow=true; mesh.position.set((fx-(baseW-1)/2)*s,(fy+0.5)*s,(fz-(baseD-1)/2)*s); group.add(mesh);} } }
     group.position.set(x,0,z); scene.add(group);
-    const e=group; registry.addComponent(e,"Building",Building({ maxHp: 200+Math.floor(rand(0,300)) }));
+    const e = { id: registry.nextId(), components: {} }; registry.add(e); registry.addComponent(e,"Building",Building({ maxHp: 200+Math.floor(rand(0,300)) }));
     registry.addComponent(e,"Transform",{ position:{x,y:0,z}, rotation:{yaw:0,pitch:0,roll:0}, scale:{x:1,y:1,z:1} });
     e.object3D=group;
   }

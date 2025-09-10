@@ -80,6 +80,8 @@ export function createHealthBarsHUD({ getWorld, getRegistry } = {}) {
       // Fill
       const pct = Math.max(0, Math.min(1, h.hp / h.max));
       bar.inner.style.width = (pct * 100) + "%";
+      const hue = 120 * pct; // 120=green, 0=red
+      bar.inner.style.background = `hsl(${hue}, 70%, 45%)`;
       bar.wrap.style.display = (v.z < 1 && v.z > -1) ? "block" : "none";
     }
 

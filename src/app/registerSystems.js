@@ -29,6 +29,8 @@ import { projectileSpawnFromVfxQueueSystem } from "../systems/weapons/projectile
 import { projectileFlightSystem } from "../systems/projectiles/projectileFlightSystem.js";
 import { lifespanSystem } from "../systems/projectiles/lifespanSystem.js";
 import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js";
+import { autoColliderAttachSystem } from "../systems/physics/autoColliderAttachSystem.js";
+import { projectileCollisionSystem } from "../systems/projectiles/projectileCollisionSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
@@ -49,6 +51,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(hardpointMountSystem);
   loop.addSystem(buildingSpawnSystem);
   loop.addSystem(autoHealthAttachSystem);
+  loop.addSystem(autoColliderAttachSystem);
 
   // Fire input (ammo/cooldowns)
   loop.addSystem(weaponInputSystem);
@@ -60,6 +63,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(projectileSpawnFromVfxQueueSystem);
   // Update projectile flight + lifespans
   loop.addSystem(projectileFlightSystem);
+  loop.addSystem(projectileCollisionSystem);
   loop.addSystem(lifespanSystem);
   // --- end Projectiles ---
   // Spawn then update VFX

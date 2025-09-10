@@ -13,6 +13,7 @@ import { createLoop } from "../engine/loop.js";
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
+import { createFloatingTextHUD } from "../hud/floatingTextHud.js";
 import { createHealthBarsHUD } from "../hud/healthBarsHud.js";
 import { createCityGeneratorHUD } from "../hud/cityGeneratorHud.js";
 import { attachInput } from "./attachInput.js";
@@ -95,6 +96,8 @@ export function createGame(canvas = document.getElementById("app")) {
   // Camera modes HUD (always shown)
   const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
   cameraHud.mount();
+  const dmgHud = createFloatingTextHUD({ getWorld: () => loop.world, getRegistry: () => registry });
+  dmgHud.mount();
   const hpHud = createHealthBarsHUD({ getWorld: () => loop.world, getRegistry: () => registry });
   hpHud.mount();
   const cityHud = createCityGeneratorHUD({ getWorld: () => loop.world, getRegistry: () => registry });
