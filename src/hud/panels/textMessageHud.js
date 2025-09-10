@@ -1,4 +1,5 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
+import { mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
+import {createPanel} from "../elements/createPanel.js";
 
 /**
  * Simple message HUD used for short hints.

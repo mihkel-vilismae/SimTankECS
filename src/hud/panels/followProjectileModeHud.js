@@ -1,5 +1,6 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
+import {  mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
 import {createButton} from "../elements/createButton.js";
+import {createPanel} from "../elements/createPanel.js";
 
 export function createFollowProjectileModeHUD({ getWorld } = {}) {
   const panel = createPanel({ id: "hud-follow-proj", title: "View: Follow Gun / Projectile" });
