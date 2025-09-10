@@ -72,7 +72,7 @@ export function vfxSpawnSystem(dt, world, registry) {
         v.x += (Math.random()-0.5)*drift;
         v.z += (Math.random()-0.5)*drift;
         v.y += upward;
-        world.vfxActive.push({ kind:"smoke", obj:s, t:0, life, size0:size, vel:v, alpha0:(p.smoke.opacity ?? 0.5) });
+        world.vfxActive.push({ kind:"smoke", obj:s, t:0, life, size0:size, vel:v, alpha:1 });
       }
     }
 

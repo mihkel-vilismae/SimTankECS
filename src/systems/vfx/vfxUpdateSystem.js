@@ -31,7 +31,7 @@ export function vfxUpdateSystem(dt, world, registry) {
       m.position.x += p.vel.x * dt;
       m.position.y += p.vel.y * dt;
       m.position.z += p.vel.z * dt;
-      m.material.opacity = (p.alpha0 ?? 0.5) * a;
+      m.material.opacity = 0.8 * a;
       if (p.t >= p.life) pools.sparks.put(m); else keep.push(p);
     } else if (p.kind === "ring") {
       const r = p.obj;

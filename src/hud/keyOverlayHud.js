@@ -13,57 +13,49 @@ const KEYS = [
 export function createKeyOverlayHUD({ getWorld } = {}) {
   const panel = createPanel({ id: "hud-key-overlay", title: "Keys" });
 
-
   const style = document.createElement("style");
   style.textContent = `
     .keygrid { display: grid; grid-template-columns: repeat(6, 40px); grid-gap: 6px; align-items: center; }
+    .mousegrid { display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 6px; margin-top: 8px; }
     .key { border: 1px solid #777; border-radius: 6px; padding: 8px 0; text-align: center; font-family: monospace; opacity: 0.65; transition: all 120ms ease; }
     .key--wide { grid-column: span 3; }
     .key--active { background: #e9f1ff; border-color: #a8c7ff; opacity: 1; box-shadow: 0 0 10px rgba(168,199,255,0.6); }
-    .row { grid-column: 1 / -1; display: contents; }
   `;
-  style.minWidth = "280px";
-  document.head.appendChild(style);
+  style.minWidth = "300px";
 
+  document.head.appendChild(style);
 
   const grid = document.createElement("div");
   grid.className = "keygrid";
 
   const keyElems = new Map();
-  function makeKey(k) {
-    const div = document.createElement("div");
-    div.className = "key" + (k.code === "Space" ? " key--wide" : "");
-    div.textContent = k.label;
-    keyElems.set(k.code, div);
-    grid.appendChild(div);
-  }
+  function mk(k){ const d=document.createElement("div"); d.className = "key" + (k.code === "Space" ? " key--wide" : ""); d.textContent = k.label; keyElems.set(k.code, d); grid.appendChild(d); }
 
-  // Layout rows: Q W E / A S D / Space
-  makeKey(KEYS[0]); makeKey(KEYS[1]); makeKey(KEYS[2]);
-  makeKey(KEYS[3]); makeKey(KEYS[4]); makeKey(KEYS[5]);
-  makeKey(KEYS[6]);
-
+  KEYS.forEach(mk);
   panel.body.appendChild(grid);
 
-  let rafId = 0;
-  function tick() {
+  const mouseRow = document.createElement("div");
+  mouseRow.className = "mousegrid";
+  const mL = document.createElement("div"); mL.className = "key"; mL.textContent = "LMB";
+  const mM = document.createElement("div"); mM.className = "key"; mM.textContent = "MMB";
+  const mR = document.createElement("div"); mR.className = "key"; mR.textContent = "RMB";
+  mouseRow.appendChild(mL); mouseRow.appendChild(mM); mouseRow.appendChild(mR);
+  panel.body.appendChild(mouseRow);
+
+  let raf = 0;
+  function tick(){
     const w = getWorld?.();
     const pressed = (w && w.input && w.input.keys) ? w.input.keys : {};
-    for (const [code, el] of keyElems.entries()) {
-      if (pressed[code]) el.classList.add("key--active");
-      else el.classList.remove("key--active");
-    }
-    rafId = requestAnimationFrame(tick);
+    for (const [code, el] of keyElems) { if (pressed[code]) el.classList.add("key--active"); else el.classList.remove("key--active"); }
+    const mb = (w && w.input && w.input.mouse && w.input.mouse.buttons) ? w.input.mouse.buttons : {};
+    if (mb.left) mL.classList.add("key--active"); else mL.classList.remove("key--active");
+    if (mb.middle) mM.classList.add("key--active"); else mM.classList.remove("key--active");
+    if (mb.right) mR.classList.add("key--active"); else mR.classList.remove("key--active");
+    raf = requestAnimationFrame(tick);
   }
 
-  function mount(container) {
-    mountPanel(panel, container ?? ensureHudRoot());
-    tick();
-  }
-  function unmount() {
-    cancelAnimationFrame(rafId);
-    destroyPanel(panel);
-  }
+  function mount(container){ mountPanel(panel, container ?? ensureHudRoot()); tick(); }
+  function unmount(){ cancelAnimationFrame(raf); destroyPanel(panel); }
   function update(){}
 
   return { mount, unmount, update };
