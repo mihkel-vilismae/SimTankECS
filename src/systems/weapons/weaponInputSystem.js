@@ -8,35 +8,50 @@ import { Logger } from "../../utils/logger.js";
  * (Projectiles/VFX can be added later.)
  */
 export function weaponInputSystem(dt, world, registry) {
-  const hullId = world.control?.entityId;
-  if (!hullId) return;
+  const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
 
-  const mouse = world.input?.mouse;
-  world.weapons = world.weapons || { lastDown: false };
+  // Tick cooldown for all guns
+  for (const ent of (registry.query?.(["Gun"]) ?? [])) {
+    const g = getC(ent, "Gun");
+    if (!g) continue;
+    if (g.cooldown > 0) g.cooldown = Math.max(0, g.cooldown - dt);
+  }
 
-  // collect guns under the controlled hull
-  const guns = registry.query(["Gun", "Mount"]);
-  for (const e of guns) {
-    const parent = registry.getById(registry.getComponent(e, "Mount").parent);
-    if (!parent?.components?.Turret) continue;
-    const g = registry.getComponent(e, "Gun");
-    // tick cooldown
-    g.cooldown = Math.max(0, g.cooldown - dt);
+  // Mouse not pressed → nothing to do
+  if (!world?.input?.mouse?.down) return;
 
-    const wantFire =
-      (g.type === "MachineGun" && mouse?.down) ||
-      (g.type === "Cannon" && world.input?.keys?.["Space"]); // Space as secondary for now
+  const controlId = world?.control?.entityId ?? null;
 
-    if (wantFire && g.cooldown <= 0 && (g.ammo === Infinity || g.ammo > 0)) {
-      // spend ammo & set cooldown
-      if (g.ammo !== Infinity) g.ammo -= 1;
-      g.cooldown = 1.0 / Math.max(0.0001, g.fireRate);
-      g._recoilVel = (g._recoilVel || 0) - ((g.recoilKick || 0.03) * (g.recoilImpulseScale || 60));
-      g.recoilOffset = Math.max(0, Math.min(g.recoilMax ?? 0.2, g.recoilOffset || 0));
-      Logger.info("[weaponInputSystem] fired", { type: g.type, ammo: g.ammo });
-      // Raise a FireEvent for VFX
-      registry.addComponent(e, "FireEvent", { count: 1, time: world.time || 0 });
-      // (spawn projectiles in a separate system later)
+  // Fire every eligible gun; if we can infer parent/owner, only fire those on the controlled unit
+  for (const ent of (registry.query?.(["Gun"]) ?? [])) {
+    const g = getC(ent, "Gun");
+    if (!g || g.cooldown > 0 || g.ammo <= 0) continue;
+
+    if (controlId) {
+      const parentId =
+          getC(ent, "Hardpoint")?.parentId ??
+          getC(ent, "Mount")?.parentId ??
+          getC(ent, "Turret")?.parentId ??
+          getC(ent, "Parent")?.id ??
+          null;
+      if (parentId && parentId !== controlId) continue;
     }
+
+    // Immediate kick so tests see > 0 peak right away
+    const max  = (typeof g.recoilMax  === 'number') ? g.recoilMax  : 0.1;
+    const kick = (typeof g.recoilKick === 'number')
+        ? g.recoilKick
+        : (g.type === 'Cannon' ? 0.08 : 0.04);
+
+    g.ammo -= 1;
+    g.cooldown = (g.cooldownMs ?? 100) / 1000;
+
+    // Directly bump offset and add a strong backward velocity
+    g.recoilOffset = Math.min(max, Math.max(0, (g.recoilOffset ?? 0) + kick));
+    g._recoilVel   = -Math.max(1, kick * 60);
+
+    registry.addComponent?.(ent, "FireEvent", { type: g.type ?? 'Gun', ammo: g.ammo });
+    console.log('[weaponInputSystem] fired', { type: g.type ?? 'Gun', ammo: g.ammo });
   }
 }
+

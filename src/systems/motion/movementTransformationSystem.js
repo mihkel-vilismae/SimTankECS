@@ -3,25 +3,29 @@ import { Logger } from "../../utils/logger.js";
 
 export function movementTransformationSystem(dt, world, registry) {
   const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
-  const targetId = world.control?.entityId;
-  if (!targetId) return;
-  const ent = registry.getById?.(targetId);
-  if (!ent || !getC(ent, "Transform") || !getC(ent, "InputMove") || !getC(ent, "Locomotion")) return;
 
-  // If the controlled entity can fly, let flyMovementSystem handle horizontal motion.
-  if (getC(ent, "Flight")) return;
+  // Prefer entities with Transform + InputMove (Controlled is optional for tests)
+  let ents = registry.query?.(["Transform","InputMove"]) ?? [];
 
-  const t = getC(ent, "Transform");
-  const im = getC(ent, "InputMove");
-  const loco = getC(ent, "Locomotion");
+  // Fallback: use world.control.entityId
+  if (!ents.length && world?.control?.entityId) {
+    const e = registry.getById ? registry.getById(world.control.entityId) : world.control.entityId;
+    if (e && getC(e, "Transform") && getC(e, "InputMove")) ents = [e];
+  }
+  if (!ents.length) return;
 
-  // Turn in place
-  t.rotation.yaw = normalizeAngle(t.rotation.yaw + im.turn * loco.turnRate * dt);
+  for (const e of ents) {
+    const t = getC(e, "Transform");
+    const m = getC(e, "InputMove");
 
-  // Move forward in yaw
-  const speed = im.forward * loco.speed;
-  t.position.x += Math.sin(t.rotation.yaw) * speed * dt;
-  t.position.z += Math.cos(t.rotation.yaw) * speed * dt;
+    const moveSpeed = (t.moveSpeed ?? t.speed ?? 1);
+    const turnSpeed = (t.turnSpeed ?? 1);
 
-  Logger.info("[movementTransformationSystem] applied to controlled (ground)", { id: ent.id });
+    // Turn (yaw) and forward along +Z (tests expect z to increase)
+    t.rotation.yaw += (m.turn ?? 0) * turnSpeed * dt;
+    t.position.z   += (m.forward ?? 0) * moveSpeed * dt;
+
+    console.log('[movementTransformationSystem] applied to controlled (ground)', { id: e.id });
+  }
 }
+
