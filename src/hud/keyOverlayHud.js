@@ -21,18 +21,20 @@ export function createKeyOverlayHUD({ getWorld } = {}) {
     .key--wide { grid-column: span 3; }
     .key--active { background: #e9f1ff; border-color: #a8c7ff; opacity: 1; box-shadow: 0 0 10px rgba(168,199,255,0.6); }
   `;
-  style.minWidth = "300px";
-
-  document.head.appendChild(style);
+  (document.head || document.documentElement).appendChild(style);
 
   const grid = document.createElement("div");
   grid.className = "keygrid";
 
   const keyElems = new Map();
-  function mk(k){ const d=document.createElement("div"); d.className = "key" + (k.code === "Space" ? " key--wide" : ""); d.textContent = k.label; keyElems.set(k.code, d); grid.appendChild(d); }
-
+  function mk(k) {
+    const d = document.createElement("div");
+    d.className = "key" + (k.code === "Space" ? " key--wide" : "");
+    d.textContent = k.label;
+    keyElems.set(k.code, d);
+    grid.appendChild(d);
+  }
   KEYS.forEach(mk);
-  panel.body.appendChild(grid);
 
   const mouseRow = document.createElement("div");
   mouseRow.className = "mousegrid";
@@ -40,13 +42,18 @@ export function createKeyOverlayHUD({ getWorld } = {}) {
   const mM = document.createElement("div"); mM.className = "key"; mM.textContent = "MMB";
   const mR = document.createElement("div"); mR.className = "key"; mR.textContent = "RMB";
   mouseRow.appendChild(mL); mouseRow.appendChild(mM); mouseRow.appendChild(mR);
+
+  panel.body.appendChild(grid);
   panel.body.appendChild(mouseRow);
 
   let raf = 0;
-  function tick(){
+  function tick() {
     const w = getWorld?.();
     const pressed = (w && w.input && w.input.keys) ? w.input.keys : {};
-    for (const [code, el] of keyElems) { if (pressed[code]) el.classList.add("key--active"); else el.classList.remove("key--active"); }
+    for (const [code, el] of keyElems) {
+      if (pressed[code]) el.classList.add("key--active");
+      else el.classList.remove("key--active");
+    }
     const mb = (w && w.input && w.input.mouse && w.input.mouse.buttons) ? w.input.mouse.buttons : {};
     if (mb.left) mL.classList.add("key--active"); else mL.classList.remove("key--active");
     if (mb.middle) mM.classList.add("key--active"); else mM.classList.remove("key--active");
@@ -54,9 +61,15 @@ export function createKeyOverlayHUD({ getWorld } = {}) {
     raf = requestAnimationFrame(tick);
   }
 
-  function mount(container){ mountPanel(panel, container ?? ensureHudRoot()); tick(); }
-  function unmount(){ cancelAnimationFrame(raf); destroyPanel(panel); }
-  function update(){}
+  function mount(container) {
+    mountPanel(panel, container ?? ensureHudRoot());
+    const rootEl = panel.el || panel.body?.parentElement || panel.body;
+    if (rootEl && rootEl.style) rootEl.style.minWidth = "300px";
+    tick();
+  }
+
+  function unmount() { cancelAnimationFrame(raf); destroyPanel(panel); }
+  function update() {}
 
   return { mount, unmount, update };
 }

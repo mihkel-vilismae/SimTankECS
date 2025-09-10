@@ -13,9 +13,9 @@ import { createLoop } from "../engine/loop.js";
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
-import { createKeyOverlayHUD } from "../hud/keyOverlayHud.js";
-import { createCinematicHUD } from "../hud/cinematicHud.js";
 import { createFollowProjectileModeHUD } from "../hud/followProjectileModeHud.js";
+import { createCinematicHUD } from "../hud/cinematicHud.js";
+import { createKeyOverlayHUD } from "../hud/keyOverlayHud.js";
 import { attachInput } from "./attachInput.js";
 import { attachMouse } from "./attachMouse.js";
 import { createHud } from "../hud/createHud.js";
@@ -96,6 +96,8 @@ export function createGame(canvas = document.getElementById("app")) {
   // Camera modes HUD (always shown)
   const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
   cameraHud.mount();
+  const followProjHud = createFollowProjectileModeHUD({ getWorld: () => loop.world });
+  followProjHud.mount();
   const cinematicHud = createCinematicHUD({ getWorld: () => loop.world });
   cinematicHud.mount();
   const keyHud = createKeyOverlayHUD({ getWorld: () => loop.world });

@@ -11,10 +11,15 @@ export function createFollowProjectileModeHUD({ getWorld } = {}) {
     btn = createButton(enabled ? "Mode: ON (Follow Gun / Projectile)" : "Mode: OFF (Click to Enable)", () => {
       const world = getWorld?.();
       if (!world) return;
-      world.followGunProjectileEnabled = !world.followGunProjectileEnabled;
-      if (world.followGunProjectileEnabled) {
-        world.cameraMode = "follow_gun";
-        world.cameraBaselineMode = "follow_gun";
+      const next = !world.followGunProjectileEnabled;
+      world.followGunProjectileEnabled = next;
+      if (next) {
+        world.cameraBaselineMode = world.cameraMode || "follow_gun";
+        world.cameraMode = "follow_gun"; // (1) switch immediately
+      } else {
+        // turn OFF: clear any pending projectile follow
+        world.followProjectileTargetId = null;
+        world.followProjectileStartTime = null;
       }
       render();
     });
