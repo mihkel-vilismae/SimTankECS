@@ -1,9 +1,13 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  test: {
+  test: { threads: false,
     environment: "jsdom",
-    setupFiles: ["./tests/setup.js"],
+    setupFiles:
+        [
+            './tests/setup/setupHeadlessWebGL.ts',
+            "./tests/setup/setup.js"
+        ],
     globals: true,
   },
 });
