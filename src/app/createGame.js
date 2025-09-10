@@ -13,17 +13,17 @@ import { createLoop } from "../engine/loop.js";
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
-import { createDebugCollidersHUD } from "../hud/debugCollidersHud.js";
-import { createFloatingTextHUD } from "../hud/floatingTextHud.js";
-import { createHealthBarsHUD } from "../hud/healthBarsHud.js";
-import { createCityGeneratorHUD } from "../hud/cityGeneratorHud.js";
+import { createDebugCollidersHUD } from "../hud/panels/debugCollidersHud.js";
+import { createFloatingTextHUD } from "../hud/panels/floatingTextHud.js";
+import { createHealthBarsHUD } from "../hud/overlays/healthBarsHud.js";
+import { createCityGeneratorHUD } from "../hud/panels/cityGeneratorHud.js";
 import { attachInput } from "./attachInput.js";
 import { attachMouse } from "./attachMouse.js";
-import { createHud } from "../hud/createHud.js";
-import { createControlledObjectHUD } from "../hud/controlledObjectHud.js";
-import { createTestButtonsHUD } from "../hud/testButtonsHud.js";
+import { createTextMessageHud } from "../hud/panels/textMessageHud.js";
+import { createControlledObjectHUD } from "../hud/panels/controlledObjectHud.js";
+import { createTestButtonsHUD } from "../hud/panels/testButtonsHud.js";
 import { hudUpdateSystemFactory } from "../systems/ui/hudUpdateSystem.js";
-import { createCameraModesHUD } from "../hud/cameraModesHud.js";
+import { createCameraModesHUD } from "../hud/panels/cameraModesHud.js";
 
 export function createGame(canvas = document.getElementById("app")) {
   const scene = createScene();
@@ -88,7 +88,7 @@ export function createGame(canvas = document.getElementById("app")) {
   // Input + HUD
   const detachInput = attachInput(loop.world);
   const detachMouse = attachMouse(loop.world, canvas);
-  const hud = createHud();
+  const hud = createTextMessageHud();
   hud.mount();
   hud.update({ text: "Tank: WSAD (A/D turn).  Ball: WSAD (A/D slide) + Q/E up/down + Mouse aim." });
   const testButtons = createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });

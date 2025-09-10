@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ensureHudRoot } from "./hudCommon.js";
+import { ensureHudRoot } from "../core/hudCommon.js";
 
 export function createFloatingTextHUD({ getWorld, getRegistry } = {}) {
   const root = ensureHudRoot();

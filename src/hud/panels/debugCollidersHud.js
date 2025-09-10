@@ -1,4 +1,4 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot, createButton } from "./hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot, createButton } from "../core/hudCommon.js";
 
 export function createDebugCollidersHUD({ getWorld } = {}){
   const panel = createPanel({ id: "hud-debug-colliders", title: "Debug: Colliders" });

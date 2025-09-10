@@ -1,4 +1,4 @@
-import { ensureHudRoot, createPanel, mountPanel, destroyPanel, createButton } from "./hudCommon.js";
+import { ensureHudRoot, createPanel, mountPanel, destroyPanel, createButton } from "../core/hudCommon.js";
 
 export function createCityGeneratorHUD({ getWorld, getRegistry } = {}) {
   const panel = createPanel({ id: "hud-city-gen", title: "City Generator" });

@@ -1,4 +1,4 @@
-import { ensureHudRoot } from "./hudCommon.js";
+import { ensureHudRoot } from "../core/hudCommon.js";
 
 export function createCinematicBannerHUD({ getWorld } = {}) {
   const root = ensureHudRoot();

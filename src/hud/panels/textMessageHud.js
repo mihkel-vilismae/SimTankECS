@@ -1,11 +1,11 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "./hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
 
 /**
  * Simple message HUD used for short hints.
  * Uniform interface: { mount, unmount, update({text}) }
  * Back-compat: setMessage(text)
  */
-export function createHud() {
+export function createTextMessageHud() {
   const panel = createPanel({ id: "hud-message", title: "HUD" });
 
   function mount(container) {

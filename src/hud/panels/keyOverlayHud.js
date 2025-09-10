@@ -1,4 +1,4 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "./hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot } from "../core/hudCommon.js";
 
 const KEYS = [
   { code: "KeyQ", label: "Q" },

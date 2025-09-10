@@ -1,4 +1,4 @@
-import { createPanel, mountPanel, destroyPanel, ensureHudRoot, renderKV } from "./hudCommon.js";
+import { createPanel, mountPanel, destroyPanel, ensureHudRoot, renderKV } from "../core/hudCommon.js";
 
 /**
  * ControlledObjectHUD
