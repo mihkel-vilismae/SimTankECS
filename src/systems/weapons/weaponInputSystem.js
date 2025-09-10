@@ -21,11 +21,13 @@ export function weaponInputSystem(dt, world, registry) {
   if (!world?.input?.mouse?.down) return;
 
   const controlId = world?.control?.entityId ?? null;
+  const selectedId = world?.weapons?.selectedId ?? null;
 
   // Fire every eligible gun; if we can infer parent/owner, only fire those on the controlled unit
   for (const ent of (registry.query?.(["Gun"]) ?? [])) {
     const g = getC(ent, "Gun");
     if (!g || g.cooldown > 0 || g.ammo <= 0) continue;
+    if (selectedId && ent.id !== selectedId) continue;
 
     if (controlId) {
       const parentId =
