@@ -5,7 +5,7 @@ param(
 # --- Helpers ---------------------------------------------------------------
 
 function Get-RepoRoot {
-  # $PSScriptRoot is the directory where this script lives (./scripts)
+  # $PSScriptRoot is where this script lives (./scripts)
   return (Split-Path -Parent $PSScriptRoot)
 }
 
@@ -22,6 +22,22 @@ function Get-LogsFilePath {
     New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
   }
   return (Join-Path $logsDir "tests_summary.txt")
+}
+
+# Fallback relative-path for older PowerShell/.NET (no Path.GetRelativePath)
+function Get-RelativePath {
+  param([string]$basePath, [string]$fullPath)
+  try {
+    $baseUri = [System.Uri]((Resolve-Path -Path $basePath).Path)
+    $fileUri = [System.Uri]((Resolve-Path -Path $fullPath).Path)
+    $relUri  = $baseUri.MakeRelativeUri($fileUri)
+    $relPath = [System.Uri]::UnescapeDataString($relUri.ToString())
+    # Convert forward slashes to backslashes for Windows
+    return ($relPath -replace '/', '\')
+  } catch {
+    # Fallback to filename if anything goes wrong
+    return (Split-Path -Path $fullPath -Leaf)
+  }
 }
 
 function Get-FileList {
@@ -46,6 +62,7 @@ function Parse-TestFile {
   param([string]$content)
   $text = Strip-Comments $content
 
+  # Handles "describe"/"suite" and "it"/"test" (and *.each(...))
   $describeRegex = [regex]'(?ms)(?<kw>\bdescribe\b|\bsuite\b)\s*\(\s*(?<q>["''`])(?<title>.*?)\k<q>\s*,'
   $itRegex       = [regex]'(?ms)(?<kw>\bit\b|\btest\b)\s*(?:\.each\s*\([^)]*\))?\s*\(\s*(?<q>["''`])(?<title>.*?)\k<q>\s*,'
 
@@ -125,9 +142,9 @@ function Format-Summary {
 
 # --- Main ------------------------------------------------------------------
 
-$testsPath=Get-TestsPath -testsDir $TestsDir
-$outPath=Get-LogsFilePath
-$files=Get-FileList -basePath $testsPath
+$testsPath = Get-TestsPath -testsDir $TestsDir
+$outPath   = Get-LogsFilePath
+$files     = Get-FileList -basePath $testsPath
 
 if (-not $files -or $files.Count -eq 0) {
   Write-Host ("No test files found under '{0}'." -f $testsPath) -ForegroundColor Yellow
@@ -135,21 +152,20 @@ if (-not $files -or $files.Count -eq 0) {
     $choice=Read-Host "PRESS [S] to save empty summary to $outPath, [Q] to exit"
     switch ($choice.ToUpper()) {
       'S' { ""|Out-File -FilePath $outPath -Encoding UTF8; Write-Host "Saved empty summary to: $outPath" -ForegroundColor Green; break }
-      'Q' { break }
+      'Q' { exit 0 }  # <-- EXIT the script immediately
       default { Write-Host "Please press S or Q." -ForegroundColor Yellow }
     }
-    break
   }
   exit 0
 }
 
 $allOutput=New-Object System.Collections.Generic.List[string]
+$repoRoot = Get-RepoRoot
 foreach ($f in $files) {
   $content=Get-Content -Raw -Path $f.FullName
   $parsed=Parse-TestFile -content $content
   if ($parsed.Tests.Count -gt 0) {
-    $repoRoot=Get-RepoRoot
-    $relFromRoot=[System.IO.Path]::GetRelativePath($repoRoot,$f.FullName)
+    $relFromRoot = Get-RelativePath -basePath $repoRoot -fullPath $f.FullName
     $allOutput.Add((Format-Summary -fileRelPath $relFromRoot -parsed $parsed))|Out-Null
   }
 }
@@ -169,7 +185,7 @@ while ($true) {
   $choice=Read-Host "PRESS [S] to save to $outPath  |  [Q] to exit"
   switch ($choice.ToUpper()) {
     'S' { $final|Out-File -FilePath $outPath -Encoding UTF8; Write-Host "Saved summary to: $outPath" -ForegroundColor Green; break }
-    'Q' { break }
+    'Q' { exit 0 }  # <-- EXIT the script immediately
     default { Write-Host "Please press S or Q." -ForegroundColor Yellow }
   }
 }

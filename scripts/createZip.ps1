@@ -15,7 +15,8 @@ function Convert-ToCamelCase {
         if ([string]::IsNullOrWhiteSpace($InputString)) { return "" }
 
         # Split on non-alphanumeric boundaries and drop empties
-        $words = $InputString -split '[^A-Za-z0-9]+' | Where-Object { $_ -ne "" }
+        $words = @($InputString -split '[^A-Za-z0-9]+' | Where-Object { $_ -ne "" })  # keep as array
+
         if ($words.Count -eq 0) { return "" }
 
         # First word lowercased; remaining words Capitalized
@@ -35,7 +36,7 @@ function Convert-ToCamelCase {
     }
 }
 
-# NEW: returns the repository root when this script lives in ./scripts
+# Returns the repository root when this script lives in ./scripts
 function Get-RepoRoot {
     [CmdletBinding()]
     param()
@@ -47,20 +48,20 @@ function Get-RepoRoot {
 $userInput = Read-Host "provide one word summary and press ENTER"
 
 # Convert input into camelCase (e.g., 'added projectiles' -> 'addedProjectiles')
-$user_input_string = Convert-ToCamelCase $userInput
+$user_input_string = if ([string]::IsNullOrWhiteSpace($userInput)) { "" } else { Convert-ToCamelCase $userInput }   # ← change 1
 
 # Get current datetime in dd-MM-yyyy_HH-mm format
 $timestamp = Get-Date -Format "dd-MM-yyyy_HH-mm"
 
-# Build zip filename
-$zipName = "SimTank_${user_input_string}_${timestamp}.zip"; Set-Location (Get-RepoRoot)  # << single-line change: jump to repo root
+# Build zip filename (absolute) in root/logs and cd to repo root for resolution
+$zipName = Join-Path (Join-Path (Get-RepoRoot) 'logs') "SimTank_${user_input_string}_${timestamp}.zip"; Set-Location (Get-RepoRoot)  # ← change 2
 
 # Files/folders to include
 $itemsToZip = @(
     "docs_instructions",
     "src",
-    "scripts",
     "tests",
+    "scripts",
     ".gitignore",
     "index.html",
     "package.json",
@@ -83,7 +84,7 @@ if ($resolvedItems.Count -eq 0) {
     exit 1
 }
 
-# Create the zip in the current directory (repo root)
+# Create the zip
 try {
     Compress-Archive -Path $resolvedItems -DestinationPath $zipName -Force
     Write-Host "Created archive: $(Join-Path (Get-Location) $zipName)"
