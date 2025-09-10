@@ -6,7 +6,8 @@ export default defineConfig({
     setupFiles:
         [
             './tests/setup/setupHeadlessWebGL.ts',
-            "./tests/setup/setup.js"
+            "./tests/setup/setup.js",
+            './tests/setup/three-mock.js'
         ],
     globals: true,
   },
