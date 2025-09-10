@@ -2,6 +2,7 @@
 // Headless WebGL setup for Vitest (Node)
 // - Provides window/document via jsdom
 // - Hooks canvas.getContext(...) to return a headless-gl WebGL context
+declare module "jsdom";
 import { JSDOM } from "jsdom";
 let glFactory: any;
 

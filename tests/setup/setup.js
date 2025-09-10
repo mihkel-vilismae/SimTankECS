@@ -1,3 +1,4 @@
+/*
 import { vi } from "vitest";
 
 class Vector3 {
@@ -89,7 +90,7 @@ class Raycaster {
   }
 }
 
-/*
+/!*
 vi.mock("three", () => {
   return {
     default: {},
@@ -119,4 +120,5 @@ vi.mock("three", () => {
     GridHelper
   };
 });
+*!/
 */
