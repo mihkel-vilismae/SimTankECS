@@ -3,7 +3,7 @@ import { hardpointMountSystem } from "../src/systems/attachment/hardpointMountSy
 import { createTransform } from "../src/components/transform.js";
 import { createHardpoints, createMount } from "../src/components/hardpoints.js";
 import { createGun } from "../src/components/gun.js";
-import { muzzleForward } from "../src/aim/math.js";
+import { muzzleForward } from "../src/utils/math.js";
 
 function makeReg() {
   const { createRegistry } = require("../src/engine/registry.js");

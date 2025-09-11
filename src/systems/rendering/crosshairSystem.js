@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ensureHudRoot } from "../../hud/hudCommon.js";
+import { ensureHudRoot } from "../../hud/core/hudCommon.js";
 
 function ensureCrosshair(world) {
   world.ui = world.ui || {};

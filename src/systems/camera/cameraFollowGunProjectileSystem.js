@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { lerp } from "../../utils/math3d.js";
-import { muzzleForward } from "../../aim/math.js";
+import { muzzleForward } from "../../utils/math.js";
 
 /**
  * Behavior:
@@ -41,7 +41,7 @@ function safeFollowGun(dt, world, registry) {
 
   let fwd = { x:0, y:0, z:1 };
   try {
-    const { muzzleForward } = require("../../aim/math.js");
+    const { muzzleForward } = require("../../utils/math.js");
     fwd = muzzleForward(preferred, registry) || fwd;
   } catch {}
 

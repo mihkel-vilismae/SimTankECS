@@ -10,6 +10,9 @@ import { createOrbitControlsSystem } from "../systems/camera/orbitControlsSystem
 import { cameraFollowSystem } from "../systems/camera/cameraFollowSystem.js";
 import { cameraFollowGunSystem } from "../systems/camera/cameraFollowGunSystem.js";
 import { arrowGizmoSystemFactory } from "../systems/rendering/arrowGizmoSystem.js";
+import { healthSystem } from "../systems/combat/healthSystem.js";
+import { autoHealthAttachSystem } from "../systems/combat/autoHealthAttachSystem.js";
+import { buildingSpawnSystem } from "../systems/world/buildingSpawnSystem.js";
 import { crosshairSystem } from "../systems/rendering/crosshairSystem.js";
 import { hardpointMountSystem } from "../systems/attachment/hardpointMountSystem.js";
 import { turretAimingSystem } from "../systems/aim/turretAimingSystem.js";
@@ -26,13 +29,16 @@ import { projectileSpawnFromVfxQueueSystem } from "../systems/weapons/projectile
 import { projectileFlightSystem } from "../systems/projectiles/projectileFlightSystem.js";
 import { lifespanSystem } from "../systems/projectiles/lifespanSystem.js";
 import { tracerRenderSystem } from "../systems/projectiles/tracerRenderSystem.js";
-import { cameraFollowGunProjectileSystem } from "../systems/camera/cameraFollowGunProjectileSystem.js";
+import { colliderDebugSystem } from "../systems/debug/colliderDebugSystem.js";
+import { autoColliderAttachSystem } from "../systems/physics/autoColliderAttachSystem.js";
+import { projectileCollisionSystem } from "../systems/projectiles/projectileCollisionSystem.js";
+import vehicleBuildingCollisionSystem from "../systems/physics/vehicleBuildingCollisionSystem.js";
 
 export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD
-  loop.addSystem(flyInputSystem);             // Q/E (+ boost)
+  loop.addSystem(flyInputSystem);
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
 
@@ -45,6 +51,9 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(turretAimingSystem);
   loop.addSystem(weaponElevationSystem);
   loop.addSystem(hardpointMountSystem);
+  loop.addSystem(buildingSpawnSystem);
+  loop.addSystem(autoHealthAttachSystem);
+  loop.addSystem(autoColliderAttachSystem);
 
   // Fire input (ammo/cooldowns)
   loop.addSystem(weaponInputSystem);
@@ -56,25 +65,32 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   loop.addSystem(projectileSpawnFromVfxQueueSystem);
   // Update projectile flight + lifespans
   loop.addSystem(projectileFlightSystem);
+  loop.addSystem(projectileCollisionSystem);
   loop.addSystem(lifespanSystem);
   // --- end Projectiles ---
   // Spawn then update VFX
   loop.addSystem(vfxSpawnSystem);
   loop.addSystem(vfxUpdateSystem);
+  loop.addSystem(healthSystem);
 
   // Render tracers (after VFX updates, before transforms applied)
   loop.addSystem(tracerRenderSystem);
 
   // Apply transforms to meshes last
   loop.addSystem(transformApplySystem);
+  loop.addSystem(colliderDebugSystem);
+
+  // After integrating motion updates:
+  loop.addSystem(projectileCollisionSystem);
+  loop.addSystem(vehicleBuildingCollisionSystem);
+
 
   // Camera / look systems
   loop.addSystem(lookAtTargetSystem);
-  const orbitSystem = createOrbitControlsSystem(camera, renderer.domElement);
+  const orbitSystem = createOrbitControlsSystem(camera, (renderer && renderer.domElement) ? renderer.domElement : { addEventListener(){}, removeEventListener(){} });
   loop.addSystem(orbitSystem);         // camera LOOK mode
   loop.addSystem(lookAtMouseSystem);          // face mouse ground
   loop.addSystem(cameraFollowSystem);
   loop.addSystem(cameraFollowGunSystem);
-  loop.addSystem(cameraFollowGunProjectileSystem);
   loop.addSystem(arrowGizmoSystem);
 }

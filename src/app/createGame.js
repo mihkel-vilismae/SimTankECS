@@ -1,3 +1,4 @@
+// src/app/createGame.js
 import * as THREE from "three";
 import { Logger } from "../utils/logger.js";
 import { createScene } from "../engine/createScene.js";
@@ -9,27 +10,47 @@ import { createSky } from "../engine/createSky.js";
 import { setupResize } from "../engine/resize.js";
 import { createRegistry } from "../engine/registry.js";
 import { createLoop } from "../engine/loop.js";
+import ProjectileVFXSystem from '../systems/vfx/ProjectileVFXSystem.js';
 
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
 import { registerSystems } from "./registerSystems.js";
-import { createFollowProjectileModeHUD } from "../hud/followProjectileModeHud.js";
-import { createCinematicHUD } from "../hud/cinematicHud.js";
-import { createKeyOverlayHUD } from "../hud/keyOverlayHud.js";
+import { createDebugCollidersHUD } from "../hud/panels/debugCollidersHud.js";
+import { createFloatingTextHUD } from "../hud/panels/floatingTextHud.js";
+import { createHealthBarsHUD } from "../hud/overlays/healthBarsHud.js";
+import { createCityGeneratorHUD } from "../hud/panels/cityGeneratorHud.js";
 import { attachInput } from "./attachInput.js";
 import { attachMouse } from "./attachMouse.js";
-import { createHud } from "../hud/createHud.js";
-import { createControlledObjectHUD } from "../hud/controlledObjectHud.js";
-import { createTestButtonsHUD } from "../hud/testButtonsHud.js";
+import { createTextMessageHud } from "../hud/panels/textMessageHud.js";
+import { createControlledObjectHUD } from "../hud/panels/controlledObjectHud.js";
+import { createTestButtonsHUD } from "../hud/panels/testButtonsHud.js";
 import { hudUpdateSystemFactory } from "../systems/ui/hudUpdateSystem.js";
-import { createCameraModesHUD } from "../hud/cameraModesHud.js";
+import { createCameraModesHUD } from "../hud/panels/cameraModesHud.js";
+import {WebGLRenderList as systems} from "three/src/renderers/webgl/WebGLRenderLists.js";
 
-export function createGame(canvas = document.getElementById("app")) {
+export function createGame(canvas) {
+  // Resolve canvas lazily and safely so module load never touches `document`
+  const resolvedCanvas =
+      canvas ??
+      (typeof document !== "undefined" && typeof document.getElementById === "function"
+          ? document.getElementById("app")
+          : { width: 1, height: 1, getContext: () => ({}) }); // test/SSR fallback
+
   const scene = createScene();
-  const renderer = createRenderer(canvas);
+
+
+  const renderer = createRenderer(resolvedCanvas);
   const camera = createCamera();
   const registry = createRegistry();
   const loop = createLoop(renderer, scene, camera, registry);
+
+  // --- Auto-wired: Projectile VFX System ---
+  const projectileVfxSystem = ProjectileVFXSystem(scene);
+  if (loop && loop.world && typeof loop.world.add === 'function') {
+    loop.world.add((dt)=> projectileVfxSystem(dt,  loop.world, registry));
+  } else if (Array.isArray(systems)) {
+    systems.push((dt)=> projectileVfxSystem(dt,  loop.world, registry));
+  }
 
   // World content
   scene.add(createGround());
@@ -54,17 +75,23 @@ export function createGame(canvas = document.getElementById("app")) {
   }
 
   function addTank() {
-    const t2 = createTank(registry); scene.add(t2.object3D); return t2;
+    const t2 = createTank(registry);
+    scene.add(t2.object3D);
+    return t2;
   }
   function addBall() {
-    const b2 = createBall(registry); scene.add(b2.object3D); return b2;
+    const b2 = createBall(registry);
+    scene.add(b2.object3D);
+    return b2;
   }
   function switchControlled() {
     // cycle through entities that have InputMove
-    const list = Array.from(registry.entities.values()).filter(e => registry.getComponent(e, "InputMove"));
+    const list = Array.from(registry.entities.values()).filter((e) =>
+        registry.getComponent(e, "InputMove"),
+    );
     if (list.length === 0) return;
     const current = getControlledEntity();
-    const idx = Math.max(0, list.findIndex(e => current && e.id === current.id));
+    const idx = Math.max(0, list.findIndex((e) => current && e.id === current.id));
     const next = list[(idx + 1) % list.length];
     loop.world.control.entityId = next.id;
   }
@@ -86,30 +113,76 @@ export function createGame(canvas = document.getElementById("app")) {
 
   // Input + HUD
   const detachInput = attachInput(loop.world);
-  const detachMouse = attachMouse(loop.world, canvas);
-  const hud = createHud();
+  const detachMouse = attachMouse(loop.world, resolvedCanvas);
+  const hud = createTextMessageHud();
   hud.mount();
-  hud.update({ text: "Tank: WSAD (A/D turn).  Ball: WSAD (A/D slide) + Q/E up/down + Mouse aim." });
-  const testButtons = createTestButtonsHUD({ addBall, addTank, switchControlled, removeAll });
+  hud.update({
+    text:
+        "Tank: WSAD (A/D turn).  Ball: WSAD (A/D slide) + Q/E up/down + Mouse aim.",
+  });
+  const testButtons = createTestButtonsHUD({
+    addBall,
+    addTank,
+    switchControlled,
+    removeAll,
+  });
   testButtons.mount();
 
   // Camera modes HUD (always shown)
-  const cameraHud = createCameraModesHUD({ initialMode: loop.world.cameraMode, onChange: (mode) => { loop.world.cameraMode = mode; } });
-  cameraHud.mount();
-  const followProjHud = createFollowProjectileModeHUD({ getWorld: () => loop.world });
-  followProjHud.mount();
-  const cinematicHud = createCinematicHUD({ getWorld: () => loop.world });
-  cinematicHud.mount();
-  const keyHud = createKeyOverlayHUD({ getWorld: () => loop.world });
-  keyHud.mount();
-  window.addEventListener("keydown", (e) => {
-    const map = { Digit1: "default", Digit2: "look", Digit3: "follow", Digit4: "orbit", Digit5: "follow_gun" };
-    const m = map[e.code];
-    if (m) { loop.world.cameraMode = m; cameraHud.update({ mode: m }); }
+  const cameraHud = createCameraModesHUD({
+    initialMode: loop.world.cameraMode,
+    onChange: (mode) => {
+      loop.world.cameraMode = mode;
+    },
   });
+  cameraHud.mount();
+  const dbgColHud = createDebugCollidersHUD({ getWorld: () => loop.world });
+  dbgColHud.mount();
+  const dmgHud = createFloatingTextHUD({
+    getWorld: () => loop.world,
+    getRegistry: () => registry,
+  });
+  dmgHud.mount();
+  const hpHud = createHealthBarsHUD({
+    getWorld: () => loop.world,
+    getRegistry: () => registry,
+  });
+  hpHud.mount();
+  const cityHud = createCityGeneratorHUD({
+    getWorld: () => loop.world,
+    getRegistry: () => registry,
+  });
+  cityHud.mount();
+
+  if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+    window.addEventListener("keydown", (e) => {
+      const map = {
+        Digit1: "default",
+        Digit2: "look",
+        Digit3: "follow",
+        Digit4: "orbit",
+        Digit5: "follow_gun",
+      };
+      const m = map[e.code];
+      if (m) {
+        loop.world.cameraMode = m;
+        cameraHud.update({ mode: m });
+      }
+    });
+  }
 
   const detachResize = setupResize(renderer, camera);
   Logger.info("[createGame] world ready (tank + ball)");
 
-  return { scene, renderer, camera, registry, loop, hud, detachInput, detachMouse, detachResize };
+  return {
+    scene,
+    renderer,
+    camera,
+    registry,
+    loop,
+    hud,
+    detachInput,
+    detachMouse,
+    detachResize,
+  };
 }

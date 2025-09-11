@@ -1,5 +1,5 @@
 import { Logger } from "../../utils/logger.js";
-import { muzzleForward, rotateXZByYaw } from "../../aim/math.js";
+import { muzzleForward, rotateXZByYaw } from "../../utils/math.js";
 
 /**
  * Applies parent Hardpoint slot transform to children with Mount, writing to child Transform.
@@ -59,4 +59,34 @@ export function hardpointMountSystem(dt, world, registry) {
     }
   }
   Logger.info("[hardpointMountSystem] applied");
+
+
+// --- recoil direction fix (v2): apply delta opposite forward AFTER base mount, no sticky base ---
+(function(){
+  const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
+  try {
+    const ents = registry.query?.(["Transform","Gun"]) ?? [];
+    for (const child of ents) {
+      const t = getC(child, "Transform");
+      const g = getC(child, "Gun");
+      if (!t || !g) continue;
+
+      const yaw   = t.rotation?.yaw ?? 0;
+      const pitch = t.rotation?.pitch ?? 0;
+      const recoil = g.recoilOffset ?? 0;
+
+      const cosP = Math.cos(pitch), sinP = Math.sin(pitch);
+      const sinY = Math.sin(yaw),   cosY = Math.cos(yaw);
+      const fx =  sinY * cosP;
+      const fy =  sinP;
+      const fz =  cosY * cosP;
+
+      t.position.x -= recoil * fx;
+      t.position.y -= recoil * fy;
+      t.position.z -= recoil * fz;
+    }
+  } catch {}
+})();
+// --- end recoil fix (v2) ---
+
 }

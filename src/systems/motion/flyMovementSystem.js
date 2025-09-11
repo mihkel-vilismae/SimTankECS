@@ -1,14 +1,15 @@
 import { Logger } from "../../utils/logger.js";
 
 export function flyMovementSystem(dt, world, registry) {
+  const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
   const targetId = world.control?.entityId;
   if (!targetId) return;
   const e = registry.getById?.(targetId);
-  if (!e || !registry.getComponent(e, "Transform") || !registry.getComponent(e, "Flight")) return;
+  if (!e || !getC(e, "Transform") || !getC(e, "Flight")) return;
 
-  const t = registry.getComponent(e, "Transform");
-  const f = registry.getComponent(e, "Flight");
-  const im = registry.getComponent(e, "InputMove"); // forward (W/S), turn used here as lateral/strafe (A/D)
+  const t = getC(e, "Transform");
+  const f = getC(e, "Flight");
+  const im = getC(e, "InputMove"); // forward (W/S), turn used here as lateral/strafe (A/D)
 
   // Vertical (Q/E with boost)
   t.position.y += f.vertical * f.climbRate * f.boost * dt;

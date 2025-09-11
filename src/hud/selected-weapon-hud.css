@@ -1,0 +1,26 @@
+.weapon-hud{
+  position:absolute;
+  left:16px; bottom:16px;
+  padding:12px 14px;
+  background:rgba(12,12,16,0.72);
+  backdrop-filter: blur(6px);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+  color:#e7e8ea;
+  width:240px;
+  user-select:none;
+  pointer-events:none;
+}
+.weapon-hud__title{ font-size:12px; opacity:.7; letter-spacing:.12em; text-transform:uppercase; }
+.weapon-hud__name{ font-size:18px; font-weight:700; margin-top:4px; }
+.weapon-hud__ammo{ margin-top:6px; font-variant-numeric: tabular-nums; opacity:.9; }
+.weapon-hud__status{ margin-top:8px; font-size:13px; }
+.weapon-hud__status[data-state="firing"]{ color:#b7ffb7; }
+.weapon-hud__status[data-state="held"]{ color:#ffe8a6; }
+.weapon-hud__status[data-state="ready"]{ color:#b7ffb7; }
+.weapon-hud__status[data-state="blocked"]{ color:#ffb7b7; }
+
+.weapon-hud__cooldown-row{ margin-top:8px; display:flex; gap:8px; align-items:center; font-size:12px; opacity:.8; }
+.weapon-hud__cooldown{ margin-top:6px; height:6px; background:rgba(255,255,255,0.08); border-radius:6px; overflow:hidden; transform: translateZ(0); }
+.weapon-hud__cooldown-fill{ height:100%; width:100%; transform-origin:left center; transform: scaleX(1); background:linear-gradient(90deg, rgba(180,220,255,0.85), rgba(120,180,255,0.6)); }

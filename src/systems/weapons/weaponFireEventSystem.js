@@ -1,5 +1,5 @@
 import { Logger } from "../../utils/logger.js";
-import { muzzleForward, rotateXZByYaw } from "../../aim/math.js";
+import { muzzleForward, rotateXZByYaw } from "../../utils/math.js";
 
 /** Collect FireEvent from guns into world.vfxQueue and clear the event. */
 export function weaponFireEventSystem(dt, world, registry) {

@@ -6,6 +6,10 @@ export function arrowGizmoSystemFactory(scene) {
   const helpers = new Map();
   Logger.info("[arrowGizmoSystem] init");
 
+  function hasArrow(registry, id) {
+    const list = registry.query?.(["Transform","ArrowGizmo"]) || [];
+    return list.some(e => (e.id ?? e) === id);
+  }
   function disposeHelper(helper) {
     try {
       if (helper?.line) {
@@ -43,9 +47,7 @@ export function arrowGizmoSystemFactory(scene) {
 
     // cleanup
     for (const [id, helper] of helpers) {
-      const ent = registry.getById?.(id);
-      const has = !!ent && !!registry.getComponent(ent, "Transform") && !!registry.getComponent(ent, "ArrowGizmo");
-      if (!has) {
+      if (!hasArrow(registry, id)) {
         scene.remove(helper);
         disposeHelper(helper);
         helpers.delete(id);

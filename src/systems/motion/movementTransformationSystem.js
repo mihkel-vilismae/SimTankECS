@@ -2,17 +2,18 @@ import { normalizeAngle } from "../../utils/math3d.js";
 import { Logger } from "../../utils/logger.js";
 
 export function movementTransformationSystem(dt, world, registry) {
+  const getC = registry.getComponent ? registry.getComponent.bind(registry) : ((e,n)=> e?.components?.[n]);
   const targetId = world.control?.entityId;
   if (!targetId) return;
   const ent = registry.getById?.(targetId);
-  if (!ent || !registry.getComponent(ent, "Transform") || !registry.getComponent(ent, "InputMove") || !registry.getComponent(ent, "Locomotion")) return;
+  if (!ent || !getC(ent, "Transform") || !getC(ent, "InputMove") || !getC(ent, "Locomotion")) return;
 
   // If the controlled entity can fly, let flyMovementSystem handle horizontal motion.
-  if (registry.getComponent(ent, "Flight")) return;
+  if (getC(ent, "Flight")) return;
 
-  const t = registry.getComponent(ent, "Transform");
-  const im = registry.getComponent(ent, "InputMove");
-  const loco = registry.getComponent(ent, "Locomotion");
+  const t = getC(ent, "Transform");
+  const im = getC(ent, "InputMove");
+  const loco = getC(ent, "Locomotion");
 
   // Turn in place
   t.rotation.yaw = normalizeAngle(t.rotation.yaw + im.turn * loco.turnRate * dt);

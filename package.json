@@ -7,15 +7,22 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "coverage": "vitest run --coverage",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:all": "vitest",
+    "test:unit": "vitest -p unit",
+    "test:integration": "vitest -p integration"
   },
   "dependencies": {
     "three": "^0.179.1"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "^0.1.79",
+    "@types/jsdom": "^21.1.7",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "gl": "^8.1.6",
     "jsdom": "^26.1.0",
     "vite": "^7.1.3",
     "vitest": "^3.2.4"
