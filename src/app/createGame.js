@@ -10,6 +10,7 @@ import { createSky } from "../engine/createSky.js";
 import { setupResize } from "../engine/resize.js";
 import { createRegistry } from "../engine/registry.js";
 import { createLoop } from "../engine/loop.js";
+import ProjectileVFXSystem from '../systems/vfx/ProjectileVFXSystem.js';
 
 import { createTank } from "../entities/tankFactory.js";
 import { createBall } from "../entities/ballFactory.js";
@@ -25,6 +26,7 @@ import { createControlledObjectHUD } from "../hud/panels/controlledObjectHud.js"
 import { createTestButtonsHUD } from "../hud/panels/testButtonsHud.js";
 import { hudUpdateSystemFactory } from "../systems/ui/hudUpdateSystem.js";
 import { createCameraModesHUD } from "../hud/panels/cameraModesHud.js";
+import {WebGLRenderList as systems} from "three/src/renderers/webgl/WebGLRenderLists.js";
 
 export function createGame(canvas) {
   // Resolve canvas lazily and safely so module load never touches `document`
@@ -35,10 +37,20 @@ export function createGame(canvas) {
           : { width: 1, height: 1, getContext: () => ({}) }); // test/SSR fallback
 
   const scene = createScene();
+
+
   const renderer = createRenderer(resolvedCanvas);
   const camera = createCamera();
   const registry = createRegistry();
   const loop = createLoop(renderer, scene, camera, registry);
+
+  // --- Auto-wired: Projectile VFX System ---
+  const projectileVfxSystem = ProjectileVFXSystem(scene);
+  if (loop && loop.world && typeof loop.world.add === 'function') {
+    loop.world.add((dt)=> projectileVfxSystem(dt,  loop.world, registry));
+  } else if (Array.isArray(systems)) {
+    systems.push((dt)=> projectileVfxSystem(dt,  loop.world, registry));
+  }
 
   // World content
   scene.add(createGround());
