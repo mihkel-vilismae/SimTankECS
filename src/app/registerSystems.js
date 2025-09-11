@@ -38,7 +38,7 @@ export function registerSystems({ loop, scene, registry, camera, renderer }) {
   const arrowGizmoSystem = arrowGizmoSystemFactory(scene);
 
   loop.addSystem(movementInputSystem);        // WASD
-  loop.addSystem(flyInputSystem);             // Q/E (+ boost)
+  loop.addSystem(flyInputSystem);
   loop.addSystem(movementTransformationSystem);
   loop.addSystem(flyMovementSystem);
 

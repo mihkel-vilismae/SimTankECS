@@ -1,4 +1,7 @@
 // src/systems/physics/projectileCollisionSystem.js
+// Detect bullets/shells hitting buildings and emit HitEvent.
+// This system is read-only on transforms; damage/explosion is NOT done here yet.
+
 import { sphereAabbOverlap } from '../../physics/collision/geometry.js';
 
 export function projectileCollisionSystem(world, registry){
@@ -6,6 +9,7 @@ export function projectileCollisionSystem(world, registry){
   const isBuilding = (id) => !!registry.getComponent(id, 'Building') || registry.getComponent(id, 'Tag')?.kind === 'Building';
   const isProjectile = (id) => !!registry.getComponent(id, 'Projectile');
 
+  // Collect buildings (AABB) and projectiles (sphere)
   const buildings = [];
   const projectiles = [];
 
@@ -33,9 +37,11 @@ export function projectileCollisionSystem(world, registry){
           targetId: b.id,
           projectileKind: p.pj?.kind || 'unknown',
         });
-        break;
+        // Do NOT mutate here (damage/explosion handled later systems)
+        break; // one hit is enough per projectile tick
       }
     }
   }
 }
+
 export default projectileCollisionSystem;
