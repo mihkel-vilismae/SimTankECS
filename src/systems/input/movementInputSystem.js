@@ -6,6 +6,7 @@ export function movementInputSystem(dt, world, registry) {
     if (world.logger && world.logger.debug) world.logger.debug('[movementInputSystem] no controlled entity');
     return;
   }
+  world.input = world.input || { keys: {}, mouse: { down:false, x:null, y:null, wheelDelta:0 } };
   const ent = registry.getById(control.entityId);
   if (!ent || !ent.components?.InputMove) return;
 

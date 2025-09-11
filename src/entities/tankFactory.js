@@ -105,7 +105,14 @@ export function createTank(registry, scene) {
     object3D: cannonGroup,
     components: {
       Transform: createTransform(0, 1.0, 0, 0, 0, 0),
-      Gun: createGun({ type: "Cannon", fireRate: 0.5, ammo: 20, spreadRad: 0.002, muzzleVel: 900, pitchMin: -0.05, pitchMax: 0.25, recoilKick: 0.08, recoilRecover: 14, recoilMax: 0.35 , recoilImpulseScale: 120 } ),
+      Gun: createGun({type: "Cannon",
+        fireRate: 0.5,
+        ammo: 20,
+        recoilKick: 0.08,        // bigger kick than MG (MG default ~0.03)
+        recoilRecover: 14,
+        recoilMax: 0.35,
+        recoilImpulseScale: 120
+      }),
       VfxEmitter: createVfxEmitter({ preset: "CANNON_MUZZLE", localPos:{x:0,y:0.10,z:1.2} }),
       Mount: createMount({ parent: turret.id, slotId: "hp_cannon" }),
     },

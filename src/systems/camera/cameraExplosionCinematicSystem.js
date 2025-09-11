@@ -18,5 +18,7 @@ export function cameraExplosionCinematicSystem(dt, world, registry) {
     world.timeScale = 1.0;
     world.cinematicExplosion = null;
     world.cinematicBanner = null;
+    // Ensure we end in baseline follow mode (test expects "follow_gun")
+    world.cameraMode = (world.cameraReturnBaseline || "follow_gun");
   }
 }

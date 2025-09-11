@@ -5,9 +5,10 @@
 import { aabbAabbMTV } from '../../physics/collision/geometry.js';
 
 export function vehicleBuildingCollisionSystem(dt, world, registry){
-  const ents = registry.query?.(['Transform','Collider']) ?? [];
-  const isBuilding = (id) => !!registry.getComponent(id, 'Building') || registry.getComponent(id, 'Tag')?.kind === 'Building';
-  const isVehicle  = (id) => !!registry.getComponent(id, 'Vehicle')  || registry.getComponent(id, 'Tag')?.kind === 'Vehicle';
+  if (!registry) return;
+  const ents = registry?.query?.(['Transform','Collider']) ?? [];
+  const isBuilding = (id) => !!registry?.getComponent?.(id, 'Building') || registry?.getComponent?.(id, 'Tag')?.kind === 'Building';
+  const isVehicle  = (id) => !!registry?.getComponent?.(id, 'Vehicle')  || registry?.getComponent?.(id, 'Tag')?.kind === 'Vehicle';
 
   const buildings = [];
   const vehicles = [];

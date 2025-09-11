@@ -12,13 +12,43 @@ export function lifespanSystem(dt, world, registry) {
       // Queue big/visible VFX
       world.vfxQueue = world.vfxQueue || [];
       if (kind === "shell") {
-        world.vfxQueue.push({ preset: "SHELL_EXPLOSION_LARGE", worldPos: { x:pos.x, y:pos.y, z:pos.z }, forward: { x:d.x, y:d.y, z:d.z } });
+        world.vfxQueue.push({
+          preset: "SHELL_EXPLOSION_LARGE",
+          worldPos: {x: pos.x, y: pos.y, z: pos.z},
+          forward: {x: d.x, y: d.y, z: d.z}
+        });
+        // Camera shake
+        world.cameraShake = {
+          time: 0.35,
+          duration: 0.35,
+          magnitude: 0.3
+        };
+        // Cinematic orbit request + baseline
+        world.cinematicBanner = {active: true, text: "SHELL EXPLOSION"};
+        world.cinematicExplosion = {active: true, phase: "orbit", t: 0, duration: 2.0, returnDur: 1.2};
+        world.cameraReturnBaseline = world.cameraReturnBaseline || "follow_gun";
+        // Stop chasing a now-dead projectile if any
+        world.followProjectileTargetId = null;
       } else {
         if (Math.random() < 0.5) {
-          world.vfxQueue.push({ preset: "BULLET_SPARK_STORM", worldPos: { x:pos.x, y:pos.y, z:pos.z }, forward: { x:d.x, y:d.y, z:d.z } });
-          world.vfxQueue.push({ kind: "BALL_GROW", worldPos: { x:pos.x, y:pos.y, z:pos.z }, life: 10.0, size0: 0.20, size1: 3.8 });
+          world.vfxQueue.push({
+            preset: "BULLET_SPARK_STORM",
+            worldPos: {x: pos.x, y: pos.y, z: pos.z},
+            forward: {x: d.x, y: d.y, z: d.z}
+          });
+          world.vfxQueue.push({
+            kind: "BALL_GROW",
+            worldPos: {x: pos.x, y: pos.y, z: pos.z},
+            life: 10.0,
+            size0: 0.20,
+            size1: 3.8
+          });
         } else {
-          world.vfxQueue.push({ preset: "BULLET_SPARK_STORM", worldPos: { x:pos.x, y:pos.y, z:pos.z }, forward: { x:d.x, y:d.y, z:d.z } });
+          world.vfxQueue.push({
+            preset: "BULLET_SPARK_STORM",
+            worldPos: {x: pos.x, y: pos.y, z: pos.z},
+            forward: {x: d.x, y: d.y, z: d.z}
+          });
         }
       }
 

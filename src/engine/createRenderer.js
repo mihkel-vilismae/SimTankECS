@@ -4,7 +4,9 @@ export function createRenderer(canvas) {
   // - Only pass canvas if non-null
   // - Guard window access
   const opts = { antialias: true };
-  if (canvas) opts.canvas = canvas;
+ if (canvas && typeof canvas.addEventListener === "function") {
+   opts.canvas = canvas;
+ }
 
   const renderer = new THREE.WebGLRenderer(opts);
 
